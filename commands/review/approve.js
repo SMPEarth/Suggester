@@ -69,7 +69,7 @@ module.exports = {
 			let checkStaff = checkReview(locale, message.guild, qServerDB, qSuggestionDB);
 			if (checkStaff) return message.channel.send(checkStaff);
 			let returned = await client.channels.cache.get(qSuggestionDB.channels.staff || qServerDB.config.channels.staff).messages.fetch(qSuggestionDB.reviewMessage).then(fetched => {
-				fetched.edit((reviewEmbed(guildLocale, qSuggestionDB, suggester, "green", string(guildLocale, "APPROVED_BY", { user: message.author.tag }))));
+				fetched.edit((reviewEmbed(guildLocale, qSuggestionDB, suggester, "green", string(guildLocale, "APPROVED_BY", { user: message.author.username }))));
 				fetched.reactions.removeAll();
 			}).catch(() => {});
 			if (returned) return;
@@ -80,11 +80,11 @@ module.exports = {
 		if (!noCommand) {
 			let replyEmbed = new Discord.MessageEmbed()
 				.setTitle(string(locale, "SUGGESTION_APPROVED_TITLE"))
-				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.tag }), suggester.displayAvatarURL({format: "png", dynamic: true}))
-				.setFooter(string(locale, "APPROVED_BY", { user: message.author.tag }), message.author.displayAvatarURL({format: "png", dynamic: true}))
+				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
+				.setFooter(string(locale, "APPROVED_BY", { user: message.author.username }), message.author.displayAvatarURL({format: "png", dynamic: true}))
 				.setDescription(qSuggestionDB.suggestion || string(locale, "NO_SUGGESTION_CONTENT"))
 				.setColor(client.colors.green);
-			isComment ? replyEmbed.addField(string(locale, "COMMENT_TITLE", { user: message.author.tag, id: `${id.toString()}_1` }), comment) : "";
+			isComment ? replyEmbed.addField(string(locale, "COMMENT_TITLE", { user: message.author.username, id: `${id.toString()}_1` }), comment) : "";
 
 			if (qSuggestionDB.attachment) {
 				replyEmbed.addField(string(locale, "WITH_ATTACHMENT_HEADER"), qSuggestionDB.attachment)
@@ -124,7 +124,7 @@ module.exports = {
 			await dbModify("Suggestion", { suggestionId: id, id: message.guild.id }, qSuggestionDB);
 			client.reactInProgress = false;
 			await notifyFollowers(client, qServerDB, qSuggestionDB, "green", { string: "APPROVED_DM_TITLE", guild: message.guild.name }, qSuggestionDB.attachment, qServerDB.config.channels.suggestions, null, function(e, l) {
-				if (comment) e.addField(string(l, "COMMENT_TITLE", { user: message.author.tag, id: `${id.toString()}_1` }), comment);
+				if (comment) e.addField(string(l, "COMMENT_TITLE", { user: message.author.username, id: `${id.toString()}_1` }), comment);
 				return e;
 			});
 		});
@@ -134,7 +134,7 @@ module.exports = {
 		if (qServerDB.config.channels.log) {
 			let embedLog = logEmbed(guildLocale, qSuggestionDB, message.author, "APPROVED_LOG", "green")
 				.setDescription(qSuggestionDB.suggestion || string(guildLocale, "NO_SUGGESTION_CONTENT"));
-			isComment ? embedLog.addField(string(guildLocale, "COMMENT_TITLE", { user: message.author.tag, id: `${id.toString()}_1` }), comment) : "";
+			isComment ? embedLog.addField(string(guildLocale, "COMMENT_TITLE", { user: message.author.username, id: `${id.toString()}_1` }), comment) : "";
 			if (qSuggestionDB.attachment) {
 				embedLog.addField(string(guildLocale, "WITH_ATTACHMENT_HEADER"), qSuggestionDB.attachment)
 					.setImage(qSuggestionDB.attachment);
@@ -143,7 +143,7 @@ module.exports = {
 			serverLog(embedLog, qServerDB, client);
 		}
 
-		await actCard("approve", qServerDB, qSuggestionDB, suggester, string(guildLocale, "APPROVED_BY", { user: message.author.tag }));
+		await actCard("approve", qServerDB, qSuggestionDB, suggester, string(guildLocale, "APPROVED_BY", { user: message.author.username }));
 
 		return { protip: { command: "approve", not: [comment ? "approve_reason" : null] } };
 	}

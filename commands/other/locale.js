@@ -62,7 +62,7 @@ module.exports = {
 		let selection = args[0].toLowerCase();
 		let found = client.locales.find(l => l.settings.code === selection || l.settings.native.toLowerCase() === selection || l.settings.english.toLowerCase() === selection);
 		if (!found) {
-			const easterEggChance = Math.floor(Math.random() * 100);
+			const easterEggChance = Math.floor(Math.random() * 1000);
 			if (easterEggChance === 7) {
 				found = client.locales.find((l) => l.settings.code === "owo");
 				console.log(easterEggChance);

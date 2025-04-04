@@ -16,10 +16,8 @@ module.exports = {
 	},
 	lists: {
 		"topgg": "https://top.gg/bot/564426594144354315/vote",
-		"botlistspace": "https://botlist.space/bot/564426594144354315/upvote",
 		"bfd": "https://botsfordiscord.com/bot/564426594144354315/vote",
 		"dbl": "https://discordbotlist.com/bots/564426594144354315/upvote",
-		"dboats": "https://discord.boats/bot/564426594144354315/vote",
 		"bod": "https://bots.ondiscord.xyz/bots/564426594144354315/review"
 	}
 };

@@ -32,7 +32,7 @@ module.exports = {
 			.setTitle(`${string(locale, "SUGGESTION_HEADER")}: #${id.toString()}`)
 			.setThumbnail(suggester.displayAvatarURL({format: "png", dynamic: true}))
 			.setDescription(qSuggestionDB.suggestion || string(locale, "NO_SUGGESTION_CONTENT"))
-			.addField(string(locale, "INFO_AUTHOR_HEADER"), string(locale, "USER_INFO_HEADER_CB", { user: suggester.tag, id: suggester.id }))
+			.addField(string(locale, "INFO_AUTHOR_HEADER"), string(locale, "USER_INFO_HEADER_CB", { user: suggester.username, id: suggester.id }))
 			.setColor(client.colors.blue)
 			.setTimestamp(qSuggestionDB.submitted)
 			.setFooter(string(locale, "SUGGESTION_FOOTER", { id: qSuggestionDB.suggestionId }));
@@ -52,7 +52,7 @@ module.exports = {
 		case "denied": {
 			let denier = await fetchUser(qSuggestionDB.staff_member, client);
 			embed.setColor(client.colors.red)
-				.addField(string(locale, "INFO_INTERNAL_STATUS_HEADER"), string(locale, "DENIED_BY", { user: denier.tag }));
+				.addField(string(locale, "INFO_INTERNAL_STATUS_HEADER"), string(locale, "DENIED_BY", { user: denier.username }));
 			if (qSuggestionDB.denial_reason) embed.addField(string(locale, "REASON_GIVEN"), qSuggestionDB.denial_reason);
 			break;
 		}
@@ -80,7 +80,7 @@ module.exports = {
 			}
 
 			let approver = await fetchUser(qSuggestionDB.staff_member, client);
-			embed.addField(string(locale, "INFO_INTERNAL_STATUS_HEADER"), string(locale, "APPROVED_BY", { user: approver.tag }));
+			embed.addField(string(locale, "INFO_INTERNAL_STATUS_HEADER"), string(locale, "APPROVED_BY", { user: approver.username }));
 
 			if (!qSuggestionDB.implemented) {
 				let messageFetched;

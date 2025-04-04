@@ -89,7 +89,7 @@ module.exports = {
 				if (qServerDB.config.channels.denied) {
 					let deniedEmbed = new Discord.MessageEmbed()
 						.setTitle(string(guildLocale, "SUGGESTION_DELETED_TITLE"))
-						.setAuthor(string(guildLocale, "SUGGESTION_FROM_TITLE", { user: suggester.tag }), suggester.displayAvatarURL({format: "png", dynamic: true}))
+						.setAuthor(string(guildLocale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
 						.setThumbnail(suggester.displayAvatarURL({format: "png", dynamic: true}))
 						.setDescription(qSuggestionDB.suggestion || string(guildLocale, "NO_SUGGESTION_CONTENT"))
 						.setFooter(string(guildLocale, "SUGGESTION_FOOTER", {id: qSuggestionDB.suggestionId.toString()}))
@@ -115,7 +115,7 @@ module.exports = {
 					serverLog(logs, qServerDB, client);
 				}
 
-				await actCard("delete", qServerDB, qSuggestionDB, suggester, `${string(guildLocale, "DELETED_BY", { user: message.author.tag })}${reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${reason}` : ""}`);
+				await actCard("delete", qServerDB, qSuggestionDB, suggester, `${string(guildLocale, "DELETED_BY", { user: message.author.username })}${reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${reason}` : ""}`);
 
 				if (qSuggestionDB.reviewMessage && (qSuggestionDB.channels.staff || qServerDB.config.channels.staff)) {
 					let doReview = true;
@@ -124,7 +124,7 @@ module.exports = {
 						if (checkStaff) doReview = false;
 					}
 					if (doReview) {
-						let re = reviewEmbed(locale, qSuggestionDB, suggester, "red", string(locale, "DELETED_BY", { user: message.author.tag }));
+						let re = reviewEmbed(locale, qSuggestionDB, suggester, "red", string(locale, "DELETED_BY", { user: message.author.username }));
 						reason ? re.addField(string(locale, "REASON_GIVEN"), reason) : "";
 						client.channels.cache.get(qSuggestionDB.channels.staff || qServerDB.config.channels.staff).messages.fetch(qSuggestionDB.reviewMessage).then(fetched => fetched.edit(re)).catch(() => {});
 					}

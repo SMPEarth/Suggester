@@ -43,7 +43,7 @@ module.exports = {
 			submitted: qSuggestionDB.submitted,
 			attachment: qSuggestionDB.attachment,
 			edit: true
-		}, suggester, "red", string(qServerDB.config.locale, "DENIED_BY", { user: message.author.tag }));
+		}, suggester, "red", string(qServerDB.config.locale, "DENIED_BY", { user: message.author.username }));
 
 		let checkStaff = checkReview(locale, message.guild, qServerDB, qSuggestionDB, true);
 		if (checkStaff) return message.channel.send(checkStaff);
@@ -56,8 +56,8 @@ module.exports = {
 		if (!noCommand) {
 			let replyEmbed = new Discord.MessageEmbed()
 				.setTitle(string(locale, "SUGGESTION_EDIT_DENIED_TITLE"))
-				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.tag }), suggester.displayAvatarURL({format: "png", dynamic: true}))
-				.setFooter(string(locale, "DENIED_BY", { user: message.author.tag }), message.author.displayAvatarURL({format: "png", dynamic: true}))
+				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
+				.setFooter(string(locale, "DENIED_BY", { user: message.author.username }), message.author.displayAvatarURL({format: "png", dynamic: true}))
 				.setDescription(qSuggestionDB.suggestion || string(locale, "NO_SUGGESTION_CONTENT"))
 				.setColor(client.colors.red);
 

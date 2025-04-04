@@ -31,7 +31,7 @@ module.exports = {
 			case "list":
 				if (!suggestion.trello_card) {
 					let c = await t.addCard(suggestion.suggestion, string(db.config.locale, "SUGGESTION_TRELLO_INFO", {
-						user: suggester.tag,
+						user: suggester.username,
 						id: suggester.id,
 						sid: suggestion.suggestionId
 					}), a.id).catch(() => null);
@@ -64,7 +64,7 @@ module.exports = {
 	trelloComment: async function (db, user, suggestion, comment) {
 		if (!db.config.trello.board || !suggestion.trello_card) return;
 		const t = module.exports.initTrello();
-		return t.addCommentToCard(suggestion.trello_card, `**${string(db.config.locale, user.id ? "COMMENT_TITLE" : "COMMENT_TITLE_ANONYMOUS", { user: user.tag, id: user.id })}**\n${comment}`).then(c => {
+		return t.addCommentToCard(suggestion.trello_card, `**${string(db.config.locale, user.id ? "COMMENT_TITLE" : "COMMENT_TITLE_ANONYMOUS", { user: user.username, id: user.id })}**\n${comment}`).then(c => {
 			return c.id;
 		}).catch(() => {});
 	}

@@ -56,20 +56,20 @@ module.exports = {
 
 		let replyEmbed = new Discord.MessageEmbed()
 			.setTitle(string(locale, "COMMENT_EDITED_TITLE"))
-			.addField(author.id !== "0" ? string(locale, "COMMENT_TITLE", { user: author.tag, id: `${id}_${comment.id}` }) : string(locale, "COMMENT_TITLE_ANONYMOUS"), comment.comment)
+			.addField(author.id !== "0" ? string(locale, "COMMENT_TITLE", { user: author.username, id: `${id}_${comment.id}` }) : string(locale, "COMMENT_TITLE_ANONYMOUS"), comment.comment)
 			.setColor(client.colors.blue)
 			.setTimestamp();
 		message.channel.send(replyEmbed).then(sent => cleanCommand(message, sent, qServerDB));
 
 		if (qServerDB.config.trello.board && qSuggestionDB.trello_card && comment.trello_comment) {
 			const t = initTrello();
-			t.makeRequest("put", `/1/cards/${qSuggestionDB.trello_card}/actions/${comment.trello_comment}/comments`, { text: `**${string(qServerDB.config.locale, author ? "COMMENT_TITLE" : "COMMENT_TITLE_ANONYMOUS", { user: author.tag, id: author.id })}**\n${newContent}` }).catch(() => null);
+			t.makeRequest("put", `/1/cards/${qSuggestionDB.trello_card}/actions/${comment.trello_comment}/comments`, { text: `**${string(qServerDB.config.locale, author ? "COMMENT_TITLE" : "COMMENT_TITLE_ANONYMOUS", { user: author.username, id: author.id })}**\n${newContent}` }).catch(() => null);
 		}
 
 		if (qServerDB.config.channels.log) {
 			let logs = logEmbed(guildLocale, qSuggestionDB, message.author, "EDITED_COMMENT_LOG", "blue")
-				.addField(author.id !== "0" ? string(guildLocale, "COMMENT_TITLE", { user: author.tag, id: `${id}_${comment.id}` }) : string(guildLocale, "COMMENT_TITLE_ANONYMOUS"), comment.comment)
-				.setAuthor(string(locale, "EDITED_COMMENT_LOG", { user: message.author.tag, id: id, comment: `${id}_${comment.id}` }), message.author.displayAvatarURL({ format: "png", dynamic: true }));
+				.addField(author.id !== "0" ? string(guildLocale, "COMMENT_TITLE", { user: author.username, id: `${id}_${comment.id}` }) : string(guildLocale, "COMMENT_TITLE_ANONYMOUS"), comment.comment)
+				.setAuthor(string(locale, "EDITED_COMMENT_LOG", { user: message.author.username, id: id, comment: `${id}_${comment.id}` }), message.author.displayAvatarURL({ format: "png", dynamic: true }));
 
 			serverLog(logs, qServerDB, client);
 		}

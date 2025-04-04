@@ -21,7 +21,7 @@ module.exports = {
 		enabled: true,
 		examples: "Use `{{p}}config help` to view detailed instructions",
 		permissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS", "ADD_REACTIONS", "READ_MESSAGE_HISTORY"],
-		cooldown: 5,
+		cooldown: 3,
 		docs: "config/configuration"
 	},
 	do: async (locale, message, client, args, Discord) => {
@@ -532,8 +532,8 @@ module.exports = {
 			cfg: async function() {
 				if (!args[1]) return message.channel.send(`${string(locale, "CONFIG_NAME:PREFIX", {}, "success")} ${Discord.escapeMarkdown(qServerDB.config.prefix)}`);
 				let prefix = args[1];
-				if (prefix.length > 20) return message.channel.send(string(locale, "CFG_PREFIX_TOO_LONG_ERROR", {}, "error"));
-				let disallowed = ["suggester:", `${client.user.id}:`];
+				if (prefix.length > 5) return message.channel.send(string(locale, "CFG_PREFIX_TOO_LONG_ERROR", {}, "error"));
+				let disallowed = ["suggester:", `${client.user.id}:`, "suggest"];
 				if (disallowed.includes(prefix.toLowerCase())) return message.channel.send(string(locale, "CFG_PREFIX_DISALLOWED_ERROR", {}, "error"));
 				qServerDB.config.prefix = prefix.toLowerCase();
 				await dbModify("Server", {id: server.id}, qServerDB);
@@ -806,10 +806,10 @@ module.exports = {
 			}
 		},
 		{
-			names: ["inchannelsuggestions", "sendinchannel", "suggestionsinchannel", "sendinchnl"],
-			name: "In-Suggestions Channel Suggestion Submission",
-			description: "This setting controls whether or not users can submit suggestions via sending a message in the suggestions feed channel.",
-			examples: "`{{p}}config inchannelsuggestions on`\nAllows users to submit suggestions via any message in the suggestions feed channel\n\n`{{p}}config inchannelsuggestions off`\nPrevents users from submitting suggestions via any message in the suggestions feed channel",
+			names: ["inchannelsuggestions", "sendinchannel", "suggestionsinchannel", "commandless"],
+			name: "Commandless Suggestions",
+			description: "This setting controls whether or not users can submit suggestions by sending a message in the suggestions feed channel.",
+			examples: "`{{p}}config commandless on`\nAllows users to submit suggestions by sending a message in the suggestions feed channel\n\n`{{p}}config inchannelsuggestions off`\nPrevents users from submitting suggestions without using commands",
 			docs: "inchannelsuggestions",
 			cfg: async function() {
 				if (!args[1]) return message.channel.send(string(locale, qServerDB.config.in_channel_suggestions ? "CFG_INCHANNEL_ENABLED" : "CFG_INCHANNEL_DISABLED"));
@@ -1274,7 +1274,7 @@ module.exports = {
 			name: "Disabled Channels",
 			description: "This setting controls channels where the bot will not respond to any commands",
 			examples: "`{{p}}config disabledchannels add #chat`\nDisables all commands in the #chat channel\n\n`{{p}}config disabledchannels remove 567385190196969493`\nRemoves the 567385190196969493 channel from the list of disabled channels\n\n`{{p}}config disabledchannels list`\nLists the configured disabled channels",
-			docs: "",
+			docs: "disabledchannels",
 			cfg: async function() {
 				switch (args[1] || "") {
 				case "add":

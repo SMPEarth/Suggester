@@ -9,7 +9,7 @@ module.exports = {
 		description: "Beans a user",
 		enabled: true,
 		permissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "USE_EXTERNAL_EMOJIS", "EMBED_LINKS"],
-		cooldown: 60,
+		cooldown: 5,
 		hidden: true
 	},
 	do: async (locale, message, client, args, Discord) => {
@@ -38,6 +38,6 @@ module.exports = {
 		}
 
 		if (qUserDB.notify && !user.bot) user.send(`<:bean:657650134502604811> ${string(locale, "BEAN_DM", { guild: message.guild.name })}`, new Discord.MessageEmbed().setDescription(reason).setColor(client.colors.bean).setImage(reverse ? "https://media.tenor.com/images/70ecc1486c82734ffddedfb4ffb622de/tenor.gif" : "")).catch(() => {});
-		message.channel.send(`<:bean:657650134502604811> ${string(locale, "BEAN_SUCCESS", { user: user.tag, id: user.id })}`, new Discord.MessageEmbed().setDescription(reason).setColor(client.colors.bean).setImage(reverse ? "https://media.tenor.com/images/70ecc1486c82734ffddedfb4ffb622de/tenor.gif" : ""), { disableMentions: "all" });
+		message.channel.send(`<:bean:657650134502604811> ${string(locale, "BEAN_SUCCESS", { user: user.username, id: user.id })}`, new Discord.MessageEmbed().setDescription(reason).setColor(client.colors.bean).setImage(reverse ? "https://media.tenor.com/images/70ecc1486c82734ffddedfb4ffb622de/tenor.gif" : ""), { disableMentions: "all" });
 	}
 };

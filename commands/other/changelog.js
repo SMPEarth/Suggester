@@ -8,9 +8,9 @@ module.exports = {
 		aliases: ["changes"],
 		usage: "changelog",
 		description: "Shows the latest Suggester release",
-		enabled: true,
+		enabled: false,
 		permissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS", "ADD_REACTIONS"],
-		cooldown: 25,
+		cooldown: 5,
 		dmAvailable: true,
 		docs: "sumup"
 	},

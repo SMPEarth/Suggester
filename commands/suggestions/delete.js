@@ -44,8 +44,8 @@ module.exports = {
 
 		let replyEmbed = new Discord.MessageEmbed()
 			.setTitle(string(locale, "SUGGESTION_DELETED_TITLE"))
-			.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.tag }), suggester.displayAvatarURL({format: "png", dynamic: true}))
-			.setFooter(string(locale, "DELETED_BY", { user: message.author.tag }), message.author.displayAvatarURL({format: "png", dynamic: true}))
+			.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
+			.setFooter(string(locale, "DELETED_BY", { user: message.author.username }), message.author.displayAvatarURL({format: "png", dynamic: true}))
 			.setDescription(qSuggestionDB.suggestion || string(locale, "NO_SUGGESTION_CONTENT"))
 			.setColor(client.colors.red);
 		reason ? replyEmbed.addField(string(locale, "REASON_GIVEN"), reason) : "";
@@ -58,7 +58,7 @@ module.exports = {
 		if (qSuggestionDB.reviewMessage && (qSuggestionDB.channels.staff || qServerDB.config.channels.staff) && client.channels.cache.get(qSuggestionDB.channels.staff || qServerDB.config.channels.staff)) {
 			let reviewCheck = checkReview(locale, message.guild, qServerDB, qSuggestionDB);
 			if (!reviewCheck) {
-				let re = reviewEmbed(locale, qSuggestionDB, suggester, "red", string(locale, "DELETED_BY", { user: message.author.tag }));
+				let re = reviewEmbed(locale, qSuggestionDB, suggester, "red", string(locale, "DELETED_BY", { user: message.author.username }));
 				reason ? re.addField(string(locale, "REASON_GIVEN"), reason) : "";
 				client.channels.cache.get(qSuggestionDB.channels.staff || qServerDB.config.channels.staff).messages.fetch(qSuggestionDB.reviewMessage).then(fetched => fetched.edit(re)).catch(() => {});
 			}
@@ -67,7 +67,7 @@ module.exports = {
 		if (qServerDB.config.channels.denied) {
 			let deniedEmbed = new Discord.MessageEmbed()
 				.setTitle(string(guildLocale, "SUGGESTION_DELETED_TITLE"))
-				.setAuthor(string(guildLocale, "SUGGESTION_FROM_TITLE", { user: suggester.tag }), suggester.displayAvatarURL({format: "png", dynamic: true}))
+				.setAuthor(string(guildLocale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
 				.setThumbnail(suggester.displayAvatarURL({format: "png", dynamic: true}))
 				.setDescription(qSuggestionDB.suggestion || string(guildLocale, "NO_SUGGESTION_CONTENT"))
 				.setFooter(string(guildLocale, "SUGGESTION_FOOTER", {id: id.toString()}))
@@ -93,7 +93,7 @@ module.exports = {
 			serverLog(logs, qServerDB, client);
 		}
 
-		await actCard("delete", qServerDB, qSuggestionDB, suggester, `${string(guildLocale, "DELETED_BY", { user: message.author.tag })}${qSuggestionDB.denial_reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${qSuggestionDB.denial_reason}` : ""}`);
+		await actCard("delete", qServerDB, qSuggestionDB, suggester, `${string(guildLocale, "DELETED_BY", { user: message.author.username })}${qSuggestionDB.denial_reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${qSuggestionDB.denial_reason}` : ""}`);
 
 		await notifyFollowers(client, qServerDB, qSuggestionDB, "red", { string: "DELETED_DM_TITLE", guild: message.guild.name }, qSuggestionDB.attachment, null, reason ? { header: "REASON_GIVEN", reason: reason } : null);
 	}

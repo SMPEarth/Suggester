@@ -141,7 +141,7 @@ module.exports = async function (interaction, client) {
 		if (qServerDB.config.trello.board && qServerDB.config.trello.actions.find(a => a.action === "suggest")) {
 			const t = initTrello();
 			let c = await t.addCard(qSuggestionDB.suggestion, string(guildLocale, "SUGGESTION_TRELLO_INFO", {
-				user: user.tag,
+				user: user.username,
 				id: interaction.member.user.id,
 				sid: qSuggestionDB.suggestionId
 			}), qServerDB.config.trello.actions.find(a => a.action === "suggest").id).catch(() => null);
@@ -206,7 +206,7 @@ module.exports = async function (interaction, client) {
 				if (qServerDB.config.trello.board && qServerDB.config.trello.actions.find(a => a.action === "suggest")) {
 					const t = initTrello();
 					let c = await t.addCard(qSuggestionDB.suggestion, string(guildLocale, "SUGGESTION_TRELLO_INFO", {
-						user: user.tag,
+						user: user.username,
 						id: interaction.member.user.id,
 						sid: qSuggestionDB.suggestionId
 					}), qServerDB.config.trello.actions.find(a => a.action === "suggest").id).catch(() => null);

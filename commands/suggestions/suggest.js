@@ -22,7 +22,7 @@ module.exports = {
 		enabled: true,
 		examples: "`{{p}}suggest This is a suggestion`\nSubmits a suggestion\n\nYou can also attach images to your suggestion by uploading an image when you send the command",
 		permissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
-		cooldown: 20,
+		cooldown: 5,
 		docs: "sumup"
 	},
 	do: async (locale, message, client, args, Discord, noCommand=false) => {
@@ -107,7 +107,7 @@ module.exports = {
 			if (!qSuggestionDB) return message.channel.send(string(locale, "ERROR", {}, "error"));
 
 			let replyEmbed = new Discord.MessageEmbed()
-				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: message.author.tag }), message.author.displayAvatarURL({dynamic: true, format: "png"}))
+				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: message.author.username }), message.author.displayAvatarURL({dynamic: true, format: "png"}))
 				.setDescription(suggestion)
 				.setFooter(string(locale, "SUGGESTION_FOOTER", { id: id.toString() }))
 				.setTimestamp()
@@ -141,7 +141,7 @@ module.exports = {
 			if (qServerDB.config.trello.board && qServerDB.config.trello.actions.find(a => a.action === "suggest")) {
 				const t = initTrello();
 				let c = await t.addCard(qSuggestionDB.suggestion, string(guildLocale, "SUGGESTION_TRELLO_INFO", {
-					user: message.author.tag,
+					user: message.author.username,
 					id: message.author.id,
 					sid: qSuggestionDB.suggestionId
 				}), qServerDB.config.trello.actions.find(a => a.action === "suggest").id).catch(() => null);
@@ -205,7 +205,7 @@ module.exports = {
 					if (qServerDB.config.trello.board && qServerDB.config.trello.actions.find(a => a.action === "suggest")) {
 						const t = initTrello();
 						let c = await t.addCard(qSuggestionDB.suggestion, string(guildLocale, "SUGGESTION_TRELLO_INFO", {
-							user: message.author.tag,
+							user: message.author.username,
 							id: message.author.id,
 							sid: qSuggestionDB.suggestionId
 						}), qServerDB.config.trello.actions.find(a => a.action === "suggest").id).catch(() => null);
@@ -224,7 +224,7 @@ module.exports = {
 				});
 
 			let replyEmbed = new Discord.MessageEmbed()
-				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: message.author.tag }), message.author.displayAvatarURL({format: "png", dynamic: true}))
+				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: message.author.username }), message.author.displayAvatarURL({format: "png", dynamic: true}))
 				.setDescription(suggestion || string(locale, "NO_SUGGESTION_CONTENT"))
 				.setFooter(string(locale, "SUGGESTION_FOOTER", { id: id.toString() }))
 				.setTimestamp()

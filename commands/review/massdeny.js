@@ -91,7 +91,7 @@ module.exports = {
 				if (qServerDB.config.channels.denied) {
 					let deniedEmbed = new Discord.MessageEmbed()
 						.setTitle(string(guildLocale, "SUGGESTION_DENIED_TITLE"))
-						.setAuthor(string(guildLocale, "SUGGESTION_FROM_TITLE", { user: suggester.tag }), suggester.displayAvatarURL({format: "png", dynamic: true}))
+						.setAuthor(string(guildLocale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
 						.setThumbnail(suggester.displayAvatarURL({format: "png", dynamic: true}))
 						.setDescription(qSuggestionDB.suggestion || string(guildLocale, "NO_SUGGESTION_CONTENT"))
 						.setFooter(string(guildLocale, "SUGGESTION_FOOTER", {id: qSuggestionDB.suggestionId.toString()}))
@@ -115,7 +115,7 @@ module.exports = {
 					serverLog(logs, qServerDB, client);
 				}
 
-				await actCard("deny", qServerDB, qSuggestionDB, suggester, `${string(guildLocale, "DENIED_BY", { user: message.author.tag })}${qSuggestionDB.denial_reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${qSuggestionDB.denial_reason}` : ""}`);
+				await actCard("deny", qServerDB, qSuggestionDB, suggester, `${string(guildLocale, "DENIED_BY", { user: message.author.username })}${qSuggestionDB.denial_reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${qSuggestionDB.denial_reason}` : ""}`);
 
 				if (qSuggestionDB.reviewMessage && (qSuggestionDB.channels.staff || qServerDB.config.channels.staff)) {
 					let doReview = true;
@@ -124,7 +124,7 @@ module.exports = {
 						if (checkStaff) doReview = false;
 					}
 					if (doReview) client.channels.cache.get(qSuggestionDB.channels.staff || qServerDB.config.channels.staff).messages.fetch(qSuggestionDB.reviewMessage).then(fetched => {
-						let re = reviewEmbed(locale, qSuggestionDB, suggester, "red", string(locale, "DENIED_BY", { user: message.author.tag }));
+						let re = reviewEmbed(locale, qSuggestionDB, suggester, "red", string(locale, "DENIED_BY", { user: message.author.username }));
 						reason ? re.addField(string(locale, "REASON_GIVEN"), reason) : "";
 						fetched.edit(re);
 						fetched.reactions.removeAll();

@@ -24,7 +24,7 @@ module.exports = {
 			let qUserDB = await dbQuery("User", { id: foundUser.id });
 			if (!args[1]) {
 				let { blocked } = qUserDB;
-				return message.channel.send(string(locale, blocked ? "IS_GLOBALLY_BANNED" : "IS_NOT_GLOBALLY_BANNED", { banned: foundUser.tag }));
+				return message.channel.send(string(locale, blocked ? "IS_GLOBALLY_BANNED" : "IS_NOT_GLOBALLY_BANNED", { banned: foundUser.username }));
 			}
 			if (qUserDB.flags && qUserDB.flags.includes("PROTECTED")) return message.channel.send(string(locale, "USER_PROTECTED_NEW_ERROR", {}, "error"));
 			if (args[1] === "true") {
@@ -33,7 +33,7 @@ module.exports = {
 			}
 			else if (args[1] === "false") qUserDB.blocked = false;
 			await dbModifyId("User", foundUser.id, qUserDB);
-			return message.channel.send(string(locale, qUserDB.blocked ? "IS_GLOBALLY_BANNED" : "IS_NOT_GLOBALLY_BANNED", { banned: foundUser.tag }, "success"));
+			return message.channel.send(string(locale, qUserDB.blocked ? "IS_GLOBALLY_BANNED" : "IS_NOT_GLOBALLY_BANNED", { banned: foundUser.username }, "success"));
 		}
 		case "server":
 		case "guild": {

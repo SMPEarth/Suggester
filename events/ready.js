@@ -20,11 +20,11 @@ module.exports = async (Discord, client) => {
 
 	for (const admin of team) {
 		client.admins.add(admin.id);
-		console.log(chalk`{blue [{bold INFO}] Found {bold ${admin.tag}}}`);
+		console.log(chalk`{blue [{bold INFO}] Found {bold ${admin.username}}}`);
 	}
 
 	coreLog(`🆗 Logged in with ${client.guilds.cache.size} servers! (Shard: ${client.shard.ids[0]})`, client);
-	console.log(chalk`{green [{bold INFO}] Logged in as {bold ${client.user.tag}}! (Release: {bold ${release}, Shard: ${client.shard.ids[0]})}}`);
+	console.log(chalk`{green [{bold INFO}] Logged in as {bold ${client.user.username}}! (Release: {bold ${release}, Shard: ${client.shard.ids[0]})}}`);
 
 	async function getGuildCount() {
 		const guildCounts = await client.shard.fetchClientValues("guilds.cache.size"); // ['1006', '966']
@@ -33,9 +33,7 @@ module.exports = async (Discord, client) => {
 	}
 
 	let presences = [
-		["PLAYING", `See the latest updates by using "@${client.user.username} changelog"`],
 		["WATCHING", async () => `${(await Suggestion.countDocuments())} suggestions`],
-		["PLAYING", `Vote for Suggester and get rewards! Use "@${client.user.username} vote" for more info`],
 		["PLAYING", `Join our support server! Use "@${client.user.username}" support for more info`]
 	];
 
@@ -52,7 +50,7 @@ module.exports = async (Discord, client) => {
 	await setPresence();
 	client.setInterval(async function() {
 		await setPresence();
-	}, 600000); //Change presence every 10 minutes
+	}, 21600000 ); // Change presence every 6 hours
 
 	client.setInterval(async function() {
 		client.guilds.cache.forEach(g => g.members.cache.sweep(m => m.id !== client.user.id));
@@ -65,7 +63,7 @@ module.exports = async (Discord, client) => {
 				}, 1000);
 			});
 		}
-	}, 60000); //Memory management every 30 minutes
+	}, 60000); // Memory management every 30 minutes
 
 	//Post to bot lists
 	async function post() {

@@ -18,16 +18,16 @@ module.exports = {
 			if (!user || user.id === "0") user = message.author;
 			let dbUser = await dbQuery("User", { id: user.id });
 			let ack = dbUser && dbUser.ack ? dbUser.ack : string(locale, "NO_ACK_SET");
-			return message.channel.send(string(locale, "ACK_FILLER_TEXT", { user: user.tag, acknowledgement: ack }));
+			return message.channel.send(string(locale, "ACK_FILLER_TEXT", { user: user.username, acknowledgement: ack }));
 		}
 
 		if (!user || user.id === "0") return message.channel.send(string(locale, "INVALID_USER_ERROR", {}, "error"));
 		let ack = args.slice(1).join(" ");
 		if (ack.toLowerCase() === "reset") {
 			await dbModifyId("User", user.id, { ack: undefined });
-			return message.channel.send(string(locale, "ACK_RESET_SUCCESS", { user: user.tag }, "success"));
+			return message.channel.send(string(locale, "ACK_RESET_SUCCESS", { user: user.username }, "success"));
 		}
 		await dbModifyId("User", user.id, { ack: ack });
-		return message.channel.send(string(locale, "ACK_SET_SUCCESS", { user: user.tag, acknowledgement: ack }, "success"));
+		return message.channel.send(string(locale, "ACK_SET_SUCCESS", { user: user.username, acknowledgement: ack }, "success"));
 	}
 };

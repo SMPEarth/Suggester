@@ -17,7 +17,7 @@ module.exports = {
 		enabled: true,
 		examples: "`{{p}}edit 1234 This is an edit suggestion`\nEdits suggestion #1234 to have the content of \"This is an edit suggestion\"",
 		permissions: ["VIEW_CHANNEL", "SEND_MESSAGES", "EMBED_LINKS", "USE_EXTERNAL_EMOJIS"],
-		cooldown: 20,
+		cooldown: 10,
 		docs: "topics/suggestion-editing"
 	},
 	do: async (locale, message, client, args, Discord, noCommand=false) => {
@@ -73,7 +73,7 @@ module.exports = {
 				t.updateCardName(qSuggestionDB.trello_card, newSuggestion).catch(() => {});
 			}
 
-			return message.channel.send(string(locale, message.author.id === suggester.id ? "SUGGESTION_UPDATED_SELF" : "SUGGESTION_UPDATED_NOT_SELF"), new Discord.MessageEmbed().setAuthor(string(locale, qSuggestionDB.anon ? "ANON_SUGGESTION" : "SUGGESTION_FROM_TITLE", { user: suggester.tag }), (qSuggestionDB.anon ? client.user : suggester).displayAvatarURL({dynamic: true, format: "png"})).setColor(client.colors.yellow).setDescription(newSuggestion).setFooter(string(locale, "SUGGESTION_FOOTER", { id: qSuggestionDB.suggestionId.toString() })).setTimestamp(qSuggestionDB.submitted)).then(sent => cleanCommand(message, sent, qServerDB));
+			return message.channel.send(string(locale, message.author.id === suggester.id ? "SUGGESTION_UPDATED_SELF" : "SUGGESTION_UPDATED_NOT_SELF"), new Discord.MessageEmbed().setAuthor(string(locale, qSuggestionDB.anon ? "ANON_SUGGESTION" : "SUGGESTION_FROM_TITLE", { user: suggester.username }), (qSuggestionDB.anon ? client.user : suggester).displayAvatarURL({dynamic: true, format: "png"})).setColor(client.colors.yellow).setDescription(newSuggestion).setFooter(string(locale, "SUGGESTION_FOOTER", { id: qSuggestionDB.suggestionId.toString() })).setTimestamp(qSuggestionDB.submitted)).then(sent => cleanCommand(message, sent, qServerDB));
 		} else {
 			//Suggestion has been approved
 			let checkSugg = checkSuggestions(locale, message.guild, qServerDB, qSuggestionDB);
@@ -104,7 +104,7 @@ module.exports = {
 
 					serverLog(embedLog, qServerDB, client);
 				}
-				return message.channel.send(string(locale, "SUGGESTION_UPDATED_REVIEW"), new Discord.MessageEmbed().setAuthor(string(locale, qSuggestionDB.anon ? "ANON_SUGGESTION" : "SUGGESTION_FROM_TITLE", { user: suggester.tag }), (qSuggestionDB.anon ? client.user : suggester).displayAvatarURL({dynamic: true, format: "png"})).setColor(client.colors.yellow).setDescription(newSuggestion).setFooter(string(locale, "SUGGESTION_FOOTER", { id: qSuggestionDB.suggestionId.toString() })).setTimestamp(qSuggestionDB.submitted)).then(sent => cleanCommand(message, sent, qServerDB));
+				return message.channel.send(string(locale, "SUGGESTION_UPDATED_REVIEW"), new Discord.MessageEmbed().setAuthor(string(locale, qSuggestionDB.anon ? "ANON_SUGGESTION" : "SUGGESTION_FROM_TITLE", { user: suggester.username }), (qSuggestionDB.anon ? client.user : suggester).displayAvatarURL({dynamic: true, format: "png"})).setColor(client.colors.yellow).setDescription(newSuggestion).setFooter(string(locale, "SUGGESTION_FOOTER", { id: qSuggestionDB.suggestionId.toString() })).setTimestamp(qSuggestionDB.submitted)).then(sent => cleanCommand(message, sent, qServerDB));
 			} else {
 				//Admin, don't send for review
 				qSuggestionDB.edited_by = suggester.id !== message.author.id ? message.author.id : null;
@@ -127,7 +127,7 @@ module.exports = {
 					const t = initTrello();
 					t.updateCardName(qSuggestionDB.trello_card, newSuggestion).catch(() => {});
 				}
-				return message.channel.send(string(locale, message.author.id === suggester.id ? "SUGGESTION_UPDATED_SELF" : "SUGGESTION_UPDATED_NOT_SELF"), new Discord.MessageEmbed().setAuthor(string(locale, qSuggestionDB.anon ? "ANON_SUGGESTION" : "SUGGESTION_FROM_TITLE", { user: suggester.tag }), (qSuggestionDB.anon ? client.user : suggester).displayAvatarURL({dynamic: true, format: "png"})).setColor(client.colors.blue).setDescription(newSuggestion).setFooter(string(locale, "SUGGESTION_FOOTER", { id: qSuggestionDB.suggestionId.toString() })).setTimestamp(qSuggestionDB.submitted)).then(sent => cleanCommand(message, sent, qServerDB));
+				return message.channel.send(string(locale, message.author.id === suggester.id ? "SUGGESTION_UPDATED_SELF" : "SUGGESTION_UPDATED_NOT_SELF"), new Discord.MessageEmbed().setAuthor(string(locale, qSuggestionDB.anon ? "ANON_SUGGESTION" : "SUGGESTION_FROM_TITLE", { user: suggester.username }), (qSuggestionDB.anon ? client.user : suggester).displayAvatarURL({dynamic: true, format: "png"})).setColor(client.colors.blue).setDescription(newSuggestion).setFooter(string(locale, "SUGGESTION_FOOTER", { id: qSuggestionDB.suggestionId.toString() })).setTimestamp(qSuggestionDB.submitted)).then(sent => cleanCommand(message, sent, qServerDB));
 			}
 		}
 	}

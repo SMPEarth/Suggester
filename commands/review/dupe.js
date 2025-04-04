@@ -70,7 +70,7 @@ module.exports = {
 			let checkStaff = checkReview(locale, message.guild, qServerDB, dupeSuggestion);
 			if (checkStaff) return message.channel.send(checkStaff);
 			let returned = await client.channels.cache.get(dupeSuggestion.channels.staff || qServerDB.config.channels.staff).messages.fetch(dupeSuggestion.reviewMessage).then(fetched => {
-				let re = reviewEmbed(locale, dupeSuggestion, suggester, "red", string(locale, review ? "DENIED_BY" : "DELETED_BY", {user: message.author.tag}));
+				let re = reviewEmbed(locale, dupeSuggestion, suggester, "red", string(locale, review ? "DENIED_BY" : "DELETED_BY", {user: message.author.username}));
 				dupeSuggestion.denial_reason ? re.addField(string(locale, "REASON_GIVEN"), dupeSuggestion.denial_reason) : "";
 				fetched.edit(re);
 				fetched.reactions.removeAll();
@@ -90,11 +90,11 @@ module.exports = {
 
 		let replyEmbed = new Discord.MessageEmbed()
 			.setTitle(string(locale, review ? "SUGGESTION_DENIED_TITLE" : "SUGGESTION_DELETED_TITLE"))
-			.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", {user: suggester.tag}), suggester.displayAvatarURL({
+			.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", {user: suggester.username}), suggester.displayAvatarURL({
 				format: "png",
 				dynamic: true
 			}))
-			.setFooter(string(locale, review ? "DENIED_BY" : "DELETED_BY", {user: message.author.tag}), message.author.displayAvatarURL({
+			.setFooter(string(locale, review ? "DENIED_BY" : "DELETED_BY", {user: message.author.username}), message.author.displayAvatarURL({
 				format: "png",
 				dynamic: true
 			}))
@@ -112,7 +112,7 @@ module.exports = {
 		if (qServerDB.config.channels.denied) {
 			let deniedEmbed = new Discord.MessageEmbed()
 				.setTitle(string(guildLocale, review ? "SUGGESTION_DENIED_TITLE" : "SUGGESTION_DELETED_TITLE"))
-				.setAuthor(string(guildLocale, "SUGGESTION_FROM_TITLE", { user: suggester.tag }), suggester.displayAvatarURL({format: "png", dynamic: true}))
+				.setAuthor(string(guildLocale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
 				.setThumbnail(suggester.displayAvatarURL({format: "png", dynamic: true}))
 				.setDescription(dupeSuggestion.suggestion || string(guildLocale, "NO_SUGGESTION_CONTENT"))
 				.setFooter(string(guildLocale, "SUGGESTION_FOOTER", {id: id.toString()}))
@@ -136,6 +136,6 @@ module.exports = {
 			serverLog(logs, qServerDB, client);
 		}
 
-		await actCard(review ? "deny" : "delete", qServerDB, dupeSuggestion, suggester, `${string(guildLocale, review ? "DENIED_BY" : "DELETED_BY", { user: message.author.tag })}${dupeSuggestion.denial_reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${dupeSuggestion.denial_reason}` : ""}`);
+		await actCard(review ? "deny" : "delete", qServerDB, dupeSuggestion, suggester, `${string(guildLocale, review ? "DENIED_BY" : "DELETED_BY", { user: message.author.username })}${dupeSuggestion.denial_reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${dupeSuggestion.denial_reason}` : ""}`);
 	}
 };

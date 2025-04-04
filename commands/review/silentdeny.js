@@ -57,7 +57,7 @@ module.exports = {
 			let returned = await client.channels.cache.get(qSuggestionDB.channels.staff || qServerDB.config.channels.staff).messages.fetch(qSuggestionDB.reviewMessage).then(fetched => {
 				let checkStaff = checkReview(locale, message.guild, qServerDB, qSuggestionDB);
 				if (checkStaff) return message.channel.send(checkStaff);
-				let re = reviewEmbed(locale, qSuggestionDB, suggester, "red", string(locale, "DENIED_BY", { user: message.author.tag }));
+				let re = reviewEmbed(locale, qSuggestionDB, suggester, "red", string(locale, "DENIED_BY", { user: message.author.username }));
 				reason ? re.addField(string(locale, "REASON_GIVEN"), reason) : "";
 				fetched.edit(re);
 				fetched.reactions.removeAll();
@@ -69,8 +69,8 @@ module.exports = {
 
 		let replyEmbed = new Discord.MessageEmbed()
 			.setTitle(string(locale, "SUGGESTION_DENIED_TITLE"))
-			.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.tag }), suggester.displayAvatarURL({format: "png", dynamic: true}))
-			.setFooter(string(locale, "DENIED_BY", { user: message.author.tag }), message.author.displayAvatarURL({format: "png", dynamic: true}))
+			.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
+			.setFooter(string(locale, "DENIED_BY", { user: message.author.username }), message.author.displayAvatarURL({format: "png", dynamic: true}))
 			.setDescription(qSuggestionDB.suggestion || string(locale, "NO_SUGGESTION_CONTENT"))
 			.setColor(client.colors.red);
 		reason ? replyEmbed.addField(string(locale, "REASON_GIVEN"), reason) : "";
@@ -92,6 +92,6 @@ module.exports = {
 			serverLog(logs, qServerDB, client);
 		}
 
-		await actCard("deny", qServerDB, qSuggestionDB, suggester, `${string(guildLocale, "DENIED_BY", { user: message.author.tag })}${qSuggestionDB.denial_reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${qSuggestionDB.denial_reason}` : ""}`);
+		await actCard("deny", qServerDB, qSuggestionDB, suggester, `${string(guildLocale, "DENIED_BY", { user: message.author.username })}${qSuggestionDB.denial_reason ? `\n${string(guildLocale, "BLOCK_REASON_HEADER")} ${qSuggestionDB.denial_reason}` : ""}`);
 	}
 };

@@ -44,7 +44,7 @@ module.exports = async (Discord, client, message) => {
 
 			command = client.commands.find((c) => c.controls.name.toLowerCase() === match[2].toLowerCase() || c.controls.aliases && c.controls.aliases.includes(match[2].toLowerCase()));
 			// eslint-disable-next-line no-useless-escape
-		} else if (message.content.match(new RegExp(`^<@!?${client.user.id}>[\s]?$`))) command = client.commands.find((c) => c.controls.name.toLowerCase() === "prefix");
+		} 
 	}
 	if (!command) return;
 
@@ -52,18 +52,18 @@ module.exports = async (Discord, client, message) => {
 	let locale = qUserDB.locale || (qServerDB ? qServerDB.config.locale : "") || "en";
 
 	if (message.channel.type === "dm" && !command.controls.dmAvailable) {
-		commandLog(`🚫 ${message.author.tag} (\`${message.author.id}\`) attempted to run command \`${command.controls.name}\` in DMs but the command is only usable in a server.`, message);
+		commandLog(`🚫 ${message.author.username} (\`${message.author.id}\`) attempted to run command \`${command.controls.name}\` in DMs but the command is only usable in a server.`, message);
 		await commandExecuted(command, message, { pre, post: new Date(), success: false });
 		return message.channel.send(string(locale, "COMMAND_SERVER_ONLY", {}, "error"));
 	}
 	if (command.controls.enabled === false || (qServerDB ? (qServerDB.flags.includes(`disable:${command.controls.name}`.toUpperCase()) || qServerDB.config.disabled_commands.includes(command.controls.name)) : false)) {
-		commandLog(`🚫 ${message.author.tag} (\`${message.author.id}\`) attempted to run command \`${command.controls.name}\` in ${message.guild ? `the **${message.channel.name}** (\`${message.channel.id}\`) channel of **${message.guild.name}** (\`${message.guild.id}\`)` : "DMs" } but the command is disabled.`, message);
+		commandLog(`🚫 ${message.author.username} (\`${message.author.id}\`) attempted to run command \`${command.controls.name}\` in ${message.guild ? `the **${message.channel.name}** (\`${message.channel.id}\`) channel of **${message.guild.name}** (\`${message.guild.id}\`)` : "DMs" } but the command is disabled.`, message);
 		await commandExecuted(command, message, { pre, post: new Date(), success: false });
 		return message.channel.send(string(locale, !command.controls.enabled ? "COMMAND_DISABLED" : "COMMAND_DISABLED_SERVER", {}, "error"));
 	}
 	if (permission > command.controls.permission) {
 		await commandExecuted(command, message, { pre, post: new Date(), success: false });
-		commandLog(`🚫 ${message.author.tag} (\`${message.author.id}\`) attempted to run command \`${command.controls.name}\` in ${message.guild ? `the **${message.channel.name}** (\`${message.channel.id}\`) channel of **${message.guild.name}** (\`${message.guild.id}\`)` : "DMs" } but did not have permission to do so.`, message);
+		commandLog(`🚫 ${message.author.username} (\`${message.author.id}\`) attempted to run command \`${command.controls.name}\` in ${message.guild ? `the **${message.channel.name}** (\`${message.channel.id}\`) channel of **${message.guild.name}** (\`${message.guild.id}\`)` : "DMs" } but did not have permission to do so.`, message);
 		if (noCommand) message.delete();
 		return;
 	}
@@ -72,12 +72,12 @@ module.exports = async (Discord, client, message) => {
 		let checkPerms = channelPermissions(locale, command.controls.permissions, message.channel, client);
 		if (checkPerms) {
 			await commandExecuted(command, message, { pre, post: new Date(), success: false });
-			commandLog(`⚠️ ${message.author.tag} (\`${message.author.id}\`) attempted to run command \`${command.controls.name}\` in ${message.guild ? `the **${message.channel.name}** (\`${message.channel.id}\`) channel of **${message.guild.name}** (\`${message.guild.id}\`)` : "DMs" } but bot permissions were invalid`, message);
+			commandLog(`⚠️ ${message.author.username} (\`${message.author.id}\`) attempted to run command \`${command.controls.name}\` in ${message.guild ? `the **${message.channel.name}** (\`${message.channel.id}\`) channel of **${message.guild.name}** (\`${message.guild.id}\`)` : "DMs" } but bot permissions were invalid`, message);
 			return message.channel.send(checkPerms).catch(() => {});
 		}
 	}
 
-	commandLog(`🔧 ${message.author.tag} (\`${message.author.id}\`) ran command \`${command.controls.name}\` in ${message.guild ? `the **${message.channel.name}** (\`${message.channel.id}\`) channel of **${message.guild.name}** (\`${message.guild.id}\`)` : "DMs" }`, message);
+	commandLog(`🔧 ${message.author.username} (\`${message.author.id}\`) ran command \`${command.controls.name}\` in ${message.guild ? `the **${message.channel.name}** (\`${message.channel.id}\`) channel of **${message.guild.name}** (\`${message.guild.id}\`)` : "DMs" }`, message);
 	if (command.controls.cooldown && command.controls.cooldown > 0 && permission > 1 && !["PROTECTED", "NO_COOLDOWN"].some(f => qUserDB.flags.includes(f)) && (message.guild ? (!qServerDB.flags.includes("NO_COOLDOWN") && (permission <= 3 ? !qServerDB.flags.includes("LARGE") : true)) : true)) {
 		/*
 			Cooldown collection:
@@ -99,11 +99,11 @@ module.exports = async (Discord, client, message) => {
 			userCount ? userCount += 1 : userCount = 1;
 
 			counts.set(message.author.id, userCount);
-			let preLimit = 10;
-			let cooldownLimit = 15;
+			let preLimit = 0;
+			let cooldownLimit = 20;
 			if (userCount > preLimit) {
 				if (userCount < cooldownLimit) return;
-				//If more than 15 cooldown breaches occur over the duration of the bot being up, auto-block the user and notify the developers
+				//If more than 20 cooldown breaches occur over the duration of the bot being up, auto-block the user and notify the developers
 				qUserDB.blocked = true;
 				await dbModify("User", { id: message.author.id }, qUserDB);
 
@@ -116,13 +116,13 @@ module.exports = async (Discord, client, message) => {
 						setTimeout(function() {
 							message.delete();
 							m.delete();
-						}, 7500);
+						}, 20000);
 					}
 				});
 
 				commandLog(`--- Cooldown Breach Lookup ${message.author.id} ---`, message);
 				let hook = new Discord.WebhookClient(log_hooks.staff_alert.id, log_hooks.staff_alert.token);
-				return hook.send(`🚨 **EXCESSIVE COOLDOWN BREACHING**\n${message.author.tag} (\`${message.author.id}\`) has breached the cooldown limit of ${cooldownLimit.toString()}\nThey were automatically blocked from using the bot globally\nCommand logs can be found by searching \`Cooldown Breach Lookup ${message.author.id}\`\n(${staff_alert_role ? `<@&${staff_alert_role}>` : "@everyone"})`, {disableMentions: "none"});
+				return hook.send(`🚨 **EXCESSIVE COOLDOWN BREACHING**\n${message.author.username} (\`${message.author.id}\`) has breached the cooldown limit of ${cooldownLimit.toString()}\nThey were automatically blocked from using the bot globally\nCommand logs can be found by searching \`Cooldown Breach Lookup ${message.author.id}\`\n(${staff_alert_role ? `<@&${staff_alert_role}>` : "@everyone"})`, {disableMentions: "none"});
 			}
 
 			if (expires > now) {
@@ -141,7 +141,6 @@ module.exports = async (Discord, client, message) => {
 		command.do(locale, message, client, args, Discord, noCommand)
 			.then(async r => {
 				commandExecuted(command, message, { pre, post: new Date(), success: true });
-				await protip(r && r.protip && r.protip.locale ? r.protip.locale : locale, message, client, Discord, r && r.protip && r.protip.force ? r.protip.force : null, r && r.protip && r.protip.command ? command.controls.name : null, r && r.protip && r.protip.not ? r.protip.not : [], permission < 2, noCommand || (command.controls.name === "suggest" ? qServerDB.config.clean_suggestion_command : false));
 			})
 			.catch((err) => {
 				let errorText;

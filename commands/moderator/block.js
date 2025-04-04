@@ -36,7 +36,7 @@ module.exports = {
 				let list = [];
 				for await (let blocked of chunk) {
 					let u = await fetchUser(typeof blocked === "string" ? blocked : blocked.id, client);
-					u ? list.push(`${u.tag} (\`${u.id}\`)`) : "";
+					u ? list.push(`${u.username} (\`${u.id}\`)`) : "";
 				}
 
 				embeds.push(new Discord.MessageEmbed()
@@ -80,12 +80,12 @@ module.exports = {
 			expires: Date.now()+duration
 		} : user.id);
 		await dbModify("Server", {id: message.guild.id}, qServerDB);
-		message.channel.send(`${string(locale, "BLOCK_SUCCESS", { user: user.tag, id: user.id }, "success")}${duration ? `\n> ${string(locale, "BLOCK_DURATION_HEADER")} ${humanizeDuration(duration, { language: locale, fallbacks: ["en"] })}` : ""}${reason ? `\n> ${string(locale, "BLOCK_REASON_HEADER")} ${reason}` : ""}`, { disableMentions: "all" });
+		message.channel.send(`${string(locale, "BLOCK_SUCCESS", { user: user.username, id: user.id }, "success")}${duration ? `\n> ${string(locale, "BLOCK_DURATION_HEADER")} ${humanizeDuration(duration, { language: locale, fallbacks: ["en"] })}` : ""}${reason ? `\n> ${string(locale, "BLOCK_REASON_HEADER")} ${reason}` : ""}`, { disableMentions: "all" });
 
 		if (qServerDB.config.channels.log) {
 			let logEmbed = new Discord.MessageEmbed()
-				.setAuthor(string(guildLocale, "BLOCK_LOG_TITLE", { staff: message.author.tag, user: user.tag }), message.author.displayAvatarURL({format: "png", dynamic: true}))
-				.setDescription(string(guildLocale, "BLOCK_USER_DATA", { tag: user.tag, id: user.id, mention: `<@${user.id}>` }))
+				.setAuthor(string(guildLocale, "BLOCK_LOG_TITLE", { staff: message.author.username, user: user.username }), message.author.displayAvatarURL({format: "png", dynamic: true}))
+				.setDescription(string(guildLocale, "BLOCK_USER_DATA", { tag: user.username, id: user.id, mention: `<@${user.id}>` }))
 				.setFooter(string(guildLocale, "STAFF_MEMBER_LOG_FOOTER", { id: message.author.id }))
 				.setTimestamp()
 				.setColor(client.colors.red);

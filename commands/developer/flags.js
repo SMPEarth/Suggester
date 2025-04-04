@@ -23,7 +23,7 @@ module.exports = {
 			let dbUser = await dbQuery("User", { id: user.id });
 			// eslint-disable-next-line no-case-declarations
 			let flags = dbUser ? dbUser.flags : null;
-			if (!args[2]) return message.channel.send(string(locale, "USER_FLAGS_LIST", { user: user.tag, flags: flags.length > 0 ? flags.join("`, `") : string(locale, "NO_FLAGS_SET") }));
+			if (!args[2]) return message.channel.send(string(locale, "USER_FLAGS_LIST", { user: user.username, flags: flags.length > 0 ? flags.join("`, `") : string(locale, "NO_FLAGS_SET") }));
 
 			if (!args[3]) return message.channel.send(string(locale, "NO_FLAG_SPECIFIED_ERROR", {}, "error"));
 			// eslint-disable-next-line no-case-declarations
@@ -35,7 +35,7 @@ module.exports = {
 				if (flags && flags.includes(flag)) return message.channel.send(string(locale, "FLAG_ALREADY_PRESENT_ERROR", { flag: flag }, "error"));
 				dbUser.flags.push(flag);
 				await dbModifyId("User", user.id, dbUser);
-				return message.channel.send(string(locale, "FLAG_ADDED_USER_SUCCESS", { user: user.tag, flag: flag }, "success"));
+				return message.channel.send(string(locale, "FLAG_ADDED_USER_SUCCESS", { user: user.username, flag: flag }, "success"));
 			}
 			case "remove":
 			case "delete":
@@ -44,7 +44,7 @@ module.exports = {
 				if (!flags || !flags.includes(flag)) return message.channel.send(string(locale, "FLAG_NOT_PRESENT_ERROR", { flag: flag }, "error"));
 				dbUser.flags.splice(dbUser.flags.findIndex(r => r === flag), 1);
 				await dbModifyId("User", user.id, dbUser);
-				return message.channel.send(string(locale, "FLAG_REMOVED_USER_SUCCESS", { user: user.tag, flag: flag }, "success"));
+				return message.channel.send(string(locale, "FLAG_REMOVED_USER_SUCCESS", { user: user.username, flag: flag }, "success"));
 			}
 			default:
 				return message.channel.send(string(locale, "ADD_REMOVE_INVALID_ACTION_ERROR", {}, "error"));

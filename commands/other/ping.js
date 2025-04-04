@@ -20,7 +20,7 @@ module.exports = {
 		let developerArray = [];
 		for (let developerId of client.admins) {
 			let user = await fetchUser(developerId, client);
-			user ? developerArray.push(`${Discord.Util.escapeMarkdown(user.tag)} (\`${user.id}\`)`) : developerArray.push(`${developerId}`);
+			user ? developerArray.push(`${Discord.Util.escapeMarkdown(user.username)} (\`${user.id}\`)`) : developerArray.push(`${developerId}`);
 		}
 
 		const shardInfo = await client.shard.broadcastEval(`[{
@@ -37,14 +37,14 @@ module.exports = {
 			.addField(string(locale, "PING_UPTIME_HEADER"), `${humanizeDuration(client.uptime, { language: locale, fallbacks: ["en"] })}\nAvg: ${humanizeDuration(shardInfo.reduce((t, c) => t + parseFloat(c[0].uptime), 0)/shardInfo.length, { language: locale, fallbacks: ["en"] })}`, true)
 			.addField(string(locale, "PING_SHARD_PING_HEADER"), `${Math.round(client.ws.ping)} ms`, true)
 			.addField(string(locale, "PING_MEMORY_HEADER"), pretty(shardInfo.reduce((t, c) => t + parseFloat(c[0].memory), 0)), true)
-			.setFooter(`${string(locale, "PING_SHARD_FOOTER", { shard: client.shard.ids[0].toString() })} • ${client.user.tag} v${version}`, client.user.displayAvatarURL({format: "png"}))
+			.setFooter(`${string(locale, "PING_SHARD_FOOTER", { shard: client.shard.ids[0].toString() })} • ${client.user.username} v${version}`, client.user.displayAvatarURL({format: "png"}))
 			.setThumbnail(client.user.displayAvatarURL({format: "png"}))
 			.setColor(client.colors.default) : new Discord.MessageEmbed()
 			.addField(string(locale, "PING_DEVELOPERS_HEADER"), developerArray.join("\n"))
 			.addField(`${string(locale, "PING_GUILD_COUNT_HEADER")}`, string(locale, "PING_COUNT_CONTENT_SHARD", { guilds: client.guilds.cache.size }), true)
 			.addField(string(locale, "PING_UPTIME_HEADER"), humanizeDuration(client.uptime, { language: locale, fallbacks: ["en"] }), true)
 			.addField(string(locale, "PING_SHARD_PING_HEADER"), `${Math.round(client.ws.ping)} ms`, true)
-			.setFooter(`${string(locale, "PING_SHARD_FOOTER", { shard: client.shard.ids[0].toString() })} • ${client.user.tag} v${version}`, client.user.displayAvatarURL({format: "png"}))
+			.setFooter(`${string(locale, "PING_SHARD_FOOTER", { shard: client.shard.ids[0].toString() })} • ${client.user.username} v${version}`, client.user.displayAvatarURL({format: "png"}))
 			.setThumbnail(client.user.displayAvatarURL({format: "png"}))
 			.setColor(client.colors.default);
 

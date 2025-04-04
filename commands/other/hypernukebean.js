@@ -38,6 +38,6 @@ module.exports = {
 		}
 
 		if (qUserDB.notify && !user.bot) user.send(`<:hypernukebean:786994388538490950> ${string(locale, "HYPERNUKEBEAN_DM", { guild: message.guild.name })}`, new Discord.MessageEmbed().setDescription(reason).setColor(client.colors.bean).setImage(reverse ? "https://media.tenor.com/images/70ecc1486c82734ffddedfb4ffb622de/tenor.gif" : "https://media.tenor.com/images/4315f4dd24b702f960347eb2000229db/tenor.gif")).catch(() => {});
-		message.channel.send(`<:hypernukebean:786994388538490950> ${string(locale, "HYPERNUKEBEAN_SUCCESS", { user: user.tag, id: user.id })}`, new Discord.MessageEmbed().setDescription(reason).setColor(client.colors.bean).setImage(reverse ? "https://media.tenor.com/images/70ecc1486c82734ffddedfb4ffb622de/tenor.gif" : "https://media.tenor.com/images/4315f4dd24b702f960347eb2000229db/tenor.gif"), { disableMentions: "all" });
+		message.channel.send(`<:hypernukebean:786994388538490950> ${string(locale, "HYPERNUKEBEAN_SUCCESS", { user: user.username, id: user.id })}`, new Discord.MessageEmbed().setDescription(reason).setColor(client.colors.bean).setImage(reverse ? "https://media.tenor.com/images/70ecc1486c82734ffddedfb4ffb622de/tenor.gif" : "https://media.tenor.com/images/4315f4dd24b702f960347eb2000229db/tenor.gif"), { disableMentions: "all" });
 	}
 };

@@ -124,7 +124,7 @@ module.exports = {
 						guild: message.guild.name
 					}, qSuggestionDB.attachment, qServerDB.config.channels.suggestions, null, function (e, l) {
 						if (reason) e.addField(string(l, "COMMENT_TITLE", {
-							user: message.author.tag,
+							user: message.author.username,
 							id: `${qSuggestionDB.suggestionId.toString()}_1`
 						}), reason);
 						return e;
@@ -147,7 +147,7 @@ module.exports = {
 						let embedLog = logEmbed(guildLocale, qSuggestionDB, message.author, "APPROVED_LOG", "green")
 							.setDescription(qSuggestionDB.suggestion || string(guildLocale, "NO_SUGGESTION_CONTENT"));
 						reason ? embedLog.addField(string(guildLocale, "COMMENT_TITLE", {
-							user: message.author.tag,
+							user: message.author.username,
 							id: `${qSuggestionDB.suggestionId.toString()}_1`
 						}), reason) : "";
 						if (qSuggestionDB.attachment) {
@@ -158,7 +158,7 @@ module.exports = {
 						serverLog(embedLog, qServerDB, client);
 					}
 
-					await actCard("approve", qServerDB, qSuggestionDB, suggester, string(guildLocale, "APPROVED_BY", { user: message.author.tag }));
+					await actCard("approve", qServerDB, qSuggestionDB, suggester, string(guildLocale, "APPROVED_BY", { user: message.author.username }));
 
 					if (qSuggestionDB.reviewMessage && (qSuggestionDB.channels.staff || qServerDB.config.channels.staff)) {
 						let doReview = true;
@@ -167,7 +167,7 @@ module.exports = {
 							if (checkStaff) doReview = false;
 						}
 						if (doReview) client.channels.cache.get(qSuggestionDB.channels.staff || qServerDB.config.channels.staff).messages.fetch(qSuggestionDB.reviewMessage).then(fetched => {
-							fetched.edit((reviewEmbed(guildLocale, qSuggestionDB, suggester, "green", string(guildLocale, "APPROVED_BY", {user: message.author.tag}))));
+							fetched.edit((reviewEmbed(guildLocale, qSuggestionDB, suggester, "green", string(guildLocale, "APPROVED_BY", {user: message.author.username}))));
 							fetched.reactions.removeAll();
 						}).catch(() => {});
 					}

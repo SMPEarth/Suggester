@@ -650,22 +650,6 @@ module.exports = {
 			string: "Automatic following is **disabled**. Users will not automatically follow suggestions when they upvote them, and not will be notified when they are updated even if they have followed them previously.",
 			context: "Shown when a guild has disabled automatic following"
 		},
-		"PROTIPS_ENABLED": {
-			string: "Protips are **enabled**.",
-			context: "Shown when a user has enabled protips"
-		},
-		"PROTIPS_DISABLED": {
-			string: "Protips are **disabled**.",
-			context: "Shown when a user has disabled protips"
-		},
-		"PROTIPS_ALREADY_ENABLED": {
-			string: "Protips are already enabled.",
-			context: "Shown when protips are enabled and a user tries to enable them"
-		},
-		"PROTIPS_ALREADY_DISABLED": {
-			string: "Protips are already disabled.",
-			context: "Shown when protips are disabled and a user tries to disable them"
-		},
 		"ON_OFF_TOGGLE_ERROR": {
 			string: "You must specify `on`, `off`, or `toggle`.",
 			context: "Used when a configuration element requires on, off, or toggle parameters"
@@ -759,7 +743,7 @@ module.exports = {
 			}
 		},
 		"SUGGESTION_FOOTER": {
-			string: "Suggestion ID: {{id}} | Submitted at",
+			string: "Suggestion ID: {{id}} | Submitted on",
 			context: "Footer for suggestion embeds",
 			replaced: {
 				id: {
@@ -769,7 +753,7 @@ module.exports = {
 			}
 		},
 		"SUGGESTION_FOOTER_WITH_EDIT": {
-			string: "Suggestion ID: {{id}} | Edited by {{editor}} | Submitted at",
+			string: "Suggestion ID: {{id}} | Edited by {{editor}} | Submitted on",
 			context: "Footer for suggestion embeds",
 			replaced: {
 				id: {
@@ -1017,8 +1001,8 @@ module.exports = {
 			}
 		},
 		"VERIFY_ACK_DEVELOPER_GA": {
-			string: "Developer/Global Administrator",
-			context: "Verify acknowledgement for Developer/Global Administrator"
+			string: "Manager",
+			context: "Verify acknowledgement for developers and bot admins"
 		},
 		"VERIFY_ACK_GLOBAL_STAFF": {
 			string: "Suggester Staff Team",
@@ -1083,7 +1067,7 @@ module.exports = {
 			}
 		},
 		"VOTE_INFO": {
-			string: "You can vote for Suggester on various bot lists, which is a great way to support the bot! If you're in the Suggester support server ({{link}}), you can get special rewards for voting 🤩\n>>> __Links to Vote:__\n{{links}}",
+			string: "You can vote for Suggester on various bot lists, which is a great way to support the bot!\n>>> __Links to Vote:__\n{{links}}",
 			context: "Response to the vote command",
 			replaced: {
 				link: {
@@ -1097,7 +1081,7 @@ module.exports = {
 			}
 		},
 		"AUTOSETUP_WARNING": {
-			string: "⚠️ Automatic Setup Warning ⚠️\n**This setup will overwrite any previous configuration and add channels to your server.**\n\nIf you would like to continue with automatic setup, click the {{check}} reaction. If you would like to abort automatic setup, click the {{x}} reaction.",
+			string: "⚠️ Automatic Setup Warning ⚠️\n**This setup will overwrite any previous configuration and create channels in your server.**\n\nIf you would like to continue, click the {{check}} reaction. To abort, click the {{x}} reaction.",
 			context: "Warning when automatic setup is initiated",
 			replaced: {
 				check: {
@@ -1481,11 +1465,11 @@ module.exports = {
 			context: "Success message when the implemented suggestions archive channel is reset"
 		},
 		"CFG_PREFIX_TOO_LONG_ERROR": {
-			string: "Your prefix must be 20 characters or less.",
+			string: "Your prefix must be 5 characters or less.",
 			context: "Error shown when a specified prefix is too long"
 		},
 		"CFG_PREFIX_DISALLOWED_ERROR": {
-			string: "This prefix is disallowed, please choose a different prefix.",
+			string: "You cannot configure this as your prefix, please choose a different one.",
 			context: "Error shown when a specified prefix is disallowed"
 		},
 		"CFG_PREFIX_SET_SUCCESS": {
@@ -2079,7 +2063,7 @@ module.exports = {
 			context: "Information in setup about skipping setting a channel"
 		},
 		"SETUP_PREFIX_DESC": {
-			string: "The prefix is what is used to trigger the commands. Prefixes are usually symbols, for example `$`, `?` or `.`\nA prefix of `.` would mean commands would be used like `.vote`",
+			string: "The prefix is what is used to trigger the commands. Prefixes are usually symbols, for example `$`, `?` or `.`\nA prefix of `.` would mean commands would be used like `.help`",
 			context: "Information about the prefix in setup"
 		},
 		"SETUP_PREFIX_INPUT": {
@@ -2087,7 +2071,7 @@ module.exports = {
 			context: "Information about prefix inputs in setup"
 		},
 		"SETUP_PREFIX_INCLUDES_SUGGEST": {
-			string: "The prefix you specified includes `suggest`, which means commands will be run using `{{prefix}}suggest`. React with {{check}} if you would like to __keep__ this prefix, and react with {{x}} to specify a new prefix.",
+			string: "The prefix you specified includes `suggestion`, which means commands will be run like `{{prefix}}suggest`. React with {{check}} if you would like to __keep__ this prefix, and react with {{x}} to specify a new one.",
 			context: "Warning if the prefix includes the term suggest in setup",
 			replaced: {
 				check: {
@@ -2109,7 +2093,7 @@ module.exports = {
 			context: "Header for the setup complete embed"
 		},
 		"SETUP_COMPLETE_DESC": {
-			string: "Suggester should now work in your server, try it out with `{{prefix}}suggest`!",
+			string: "Suggester should now work in your server, try it out with `{{prefix}}suggest`",
 			context: "Content for the setup complete embed",
 			replaced: {
 				prefix: {
@@ -2147,7 +2131,7 @@ module.exports = {
 			}
 		},
 		"DISABLE_INCHANNEL_WARNING": {
-			string: "This channel is your suggestions channel, so disabling this channel will also disable the in channel suggestions feature. React with {{check}} if you would like to disable this channel, and {{x}} if you would like to cancel.",
+			string: "This channel is your suggestions channel, so disabling this channel will also disable the Commandless Suggestions feature. React with {{check}} if you would like to disable this channel, and {{x}} if you would like to cancel.",
 			context: "Warning about disabling commands in the suggestion channel when commandless suggestions are enabled",
 			replaced: {
 				check: {
@@ -3033,31 +3017,31 @@ module.exports = {
 			context: "String representing the View Guild Insights permission"
 		},
 		"BOT_ADMIN_PERMISSION_SENTENCE_NEW": {
-			string: "<:sdev:842489745723752469> This command is only usable by bot administrators",
+			string: "🛡️ This command is only usable by bot managers",
 			context: "Permission shown in the help command if only bot admins can use the command"
 		},
 		"GLOBAL_STAFF_PERMISSION_SENTENCE_NEW": {
-			string: "<:sstaff:842489745812226078> This command is only usable by global Suggester staff",
+			string: "📣 This command is only usable by global Suggester Staff",
 			context: "Permission shown in the help command if global staff+ can use the command"
 		},
 		"SERVER_ADMIN_PERMISSION_SENTENCE": {
-			string: "<:ssadmin:740199955981140030> This command is only usable by members with the \"Manage Server\" permission or a configured admin role",
+			string: "👑 This command is only usable by members with the \"Manage Server\" permission or a configured admin role",
 			context: "Permission shown in the help command if server admins+ can use the command"
 		},
 		"SERVER_STAFF_PERMISSION_SENTENCE": {
-			string: "<:ssstaff:740199956429799515> This command is only usable by members with a configured staff role or those with admin permissions",
+			string: "🔨 This command is only usable by members with a configured staff role or those with admin permissions",
 			context: "Permission shown in the help command if server staff+ can use the command"
 		},
 		"ALL_USERS_PERMISSION_SENTENCE": {
-			string: "<:sall:740199956325072998> This command is usable by all users",
+			string: "👍 This command is usable by all users",
 			context: "Permission shown in the help command if all users can use the command"
 		},
 		"HAS_NOT_COMMAND_PERMISSION": {
-			string: "<:slock:740204044450005103> You do not have permission to use this command",
+			string: "🔒 You do not have permission to use this command",
 			context: "Shown in help if a user does not have permission to use a command"
 		},
 		"HAS_COMMAND_PERMISSION": {
-			string: "<:sunlock:740204044928155788> You are able to use this command",
+			string: "🔓 You are able to use this command",
 			context: "Shown in help if a user has permission to use a command"
 		},
 		"CFG_ALREADY_BLOCKED_ROLE_ERROR": {
@@ -3269,7 +3253,7 @@ module.exports = {
 			context: "Header for the useful links section of the help embed"
 		},
 		"HELP_USEFUL_LINKS_DESC_NEW": {
-			string: "[Join our Support Server](https://discord.gg/{{support_invite}})\n[Documentation](https://suggester.js.org/)\n[Invite Me]({{bot_invite}})\n[Support Suggester](https://suggester.js.org/#/supporting/info)\n[Privacy Policy](https://suggester.js.org/#/legal)",
+			string: "[Join our Support Server](https://discord.gg/{{support_invite}})\n[Documentation](https://suggester.js.org/)\n[Invite Me]({{bot_invite}})\n[Support Suggester](https://suggester.js.org/#/supporting/info)\n[Privacy Policy](https://suggester.js.org/#/legal/privacy)",
 			context: "Shows useful links on the help command",
 			replaced: {
 				support_invite: {
@@ -3281,248 +3265,6 @@ module.exports = {
 					description: "The link to invite the bot"
 				}
 			}
-		},
-		"PROTIP_TITLE": {
-			string: "**Protip:**",
-			context: "Title when protips are shown"
-		},
-		"PROTIP_INVITE": {
-			string: "You can invite Suggester to your server [here]({{bot_invite}})",
-			context: "Protip for inviting the bot",
-			replaced: {
-				bot_invite: {
-					to_replace: "{{bot_invite}}",
-					description: "The link to invite the bot"
-				}
-			}
-		},
-		"PROTIP_SUPPORT": {
-			string: "If you need help with Suggester or want to suggest a new feature, join our [support server]({{support_invite}})",
-			context: "Protip for the support server",
-			replaced: {
-				support_invite: {
-					to_replace: "{{support_invite}}",
-					description: "The link to the support server"
-				}
-			}
-		},
-		"PROTIP_REASON_APPROVE": {
-			string: "You can specify a comment when approving a suggestion using `{{prefix}}approve <suggestion id> <comment>`",
-			context: "Protip for approving with a comment",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_MASS_APPROVE": {
-			string: "You can approve multiple suggestions at once using `{{prefix}}mapprove <suggestion id 1> <suggestion id 2> <suggestion id 3> -r <comment>`",
-			context: "Protip for mass approving",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_REASON_DENY": {
-			string: "You can specify a reason when denying a suggestion using `{{prefix}}deny <suggestion id> <reason>`",
-			context: "Protip for denying with a reason",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_MASS_DENY": {
-			string: "You can deny multiple suggestions at once using `{{prefix}}mdeny <suggestion id 1> <suggestion id 2> <suggestion id 3> -r <comment>`",
-			context: "Protip for mass denying",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_INCHANNEL": {
-			string: "You can configure Suggester to allow suggestions to be submitted via any message in the suggestions feed channel using `{{prefix}}config sendinchannel on`",
-			context: "Protip for in-channel suggestions",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_EMOTES": {
-			string: "You can configure custom reaction emojis for the suggestion feed using these commands:\n`{{prefix}}config emojis up <emoji>`\n`{{prefix}}config emojis mid <emoji>`\n`{{prefix}}config emojis down <emoji>`\n\nYou can also disable any of the reaction emojis using `{{prefix}}config emojis <up, mid, or down> disable`",
-			context: "Protip for emote config",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_VOTING": {
-			string: "If you enjoy Suggester, consider helping to support us by voting on bot lists! If you have a minute, click [here]({{list}}) and vote.\nIf you want to help even more, you can use `{{prefix}}vote` to see the full list of sites where you can vote. Thanks for your support!",
-			context: "Protip for voting",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				},
-				list: {
-					to_replace: "{{list}}",
-					description: "Randomly selected bot list link"
-				}
-			}
-		},
-		"PROTIP_NOTIFY": {
-			string: "You can use `{{prefix}}notify` to enable or disable receiving DM notifications when an action is taken on one of your suggestions",
-			context: "Protip for notify",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_LOCALE": {
-			string: "You can use `{{prefix}}locale` to make the bot respond to you in a different language. If your language isn't listed and/or you'd like to help translate, join our [Support Server]({{support_invite}}) and ask to join the Translation Program!",
-			context: "Protip for locale",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				},
-				support_invite: {
-					to_replace: "{{support_invite}}",
-					description: "The link to the support server"
-				}
-			}
-		},
-		"PROTIP_CHANGELOG": {
-			string: "You can use `{{prefix}}changelog` to see the latest bot updates",
-			context: "Protip for changelog",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_ACOMMENT": {
-			string: "You can add an anonymous comment to a suggestion using `{{prefix}}acomment <suggestion ID> <comment>`. These are the same as comments, but they don't show who created them",
-			context: "Protip for acomment",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_MARKCOMMENT": {
-			string: "You can add a comment to a suggestion when using the mark command using `{{prefix}}mark <suggestion ID> <status> <comment>`",
-			context: "Protip for mark with a comment",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_BLOCK": {
-			string: "You can block a user from using the bot on your server using `{{prefix}}block <user>`",
-			context: "Protip for block",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_COLORCHANGE": {
-			string: "You can configure the bot to change the embed color when a suggestion reaches a certain number of upvotes by using `{{prefix}}config colorchange number <number of upvotes>` and `{{prefix}}config colorchange color <color>`",
-			context: "Protip for colorchange",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_QUEUE": {
-			string: "You can view all suggestions currently awaiting review using the `{{prefix}}queue` command",
-			context: "Protip for queue",
-			replaced: {
-				prefix: {
-					to_replace: "{{prefix}}",
-					description: "The server prefix"
-				}
-			}
-		},
-		"PROTIP_CANARY": {
-			string: "You can join the Suggester Canary program to help test new bot features before they are released to the main bot. Join the [Support Server]({{support_invite}}) for info!",
-			context: "Protip for Canary",
-			replaced: {
-				support_invite: {
-					to_replace: "{{support_invite}}",
-					description: "The link to the support server"
-				}
-			}
-		},
-		"PROTIP_LARGE_SERVER": {
-			string: "This server may be eligible for Suggester's **large server program**. Read more about the program [here](https://suggester.js.org/#/community-programs) and apply in the [support server]({{support_invite}}) for info!",
-			context: "Protip for the large server program",
-			replaced: {
-				support_invite: {
-					to_replace: "{{support_invite}}",
-					description: "The link to the support server"
-				}
-			}
-		},
-		"PROTIP_RICKROLL": {
-			string: "We're no strangers to love\n" +
-				"You know the rules and so do I\n" +
-				"A full commitment's what I'm thinking of\n" +
-				"You wouldn't get this from any other guy\n" +
-				"I just wanna tell you how I'm feeling\n" +
-				"Gotta make you understand\n" +
-				"Never gonna give you up\n" +
-				"Never gonna let you down\n" +
-				"Never gonna run around and desert you\n" +
-				"Never gonna make you cry\n" +
-				"Never gonna say goodbye\n" +
-				"Never gonna tell a lie and hurt you\n" +
-				"We've known each other for so long\n" +
-				"Your heart's been aching but you're too shy to say it\n" +
-				"Inside we both know what's been going on\n" +
-				"We know the game and we're gonna play it\n" +
-				"And if you ask me how I'm feeling\n" +
-				"Don't tell me you're too blind to see\n" +
-				"Never gonna give you up\n" +
-				"Never gonna let you down\n" +
-				"Never gonna run around and desert you\n" +
-				"Never gonna make you cry\n" +
-				"Never gonna say goodbye\n" +
-				"Never gonna tell a lie and hurt you\n" +
-				"Never gonna give you up\n" +
-				"Never gonna let you down\n" +
-				"Never gonna run around and desert you\n" +
-				"Never gonna make you cry\n" +
-				"Never gonna say goodbye",
-			context: "Protip for a rick-roll"
-		},
-		"PROTIPS_TITLE": {
-			string: "**Protips:**",
-			context: "Denotes the protips section in the verify embed"
-		},
-		"PROTIPS_SHOWN_TITLE": {
-			string: "**Protips Shown:**",
-			context: "Denotes the protips shown section in the verify embed"
 		},
 		"IMPORTED_REASON": {
 			string: "This suggestion was denied before it was imported into Suggester.",
@@ -3965,30 +3707,6 @@ module.exports = {
 			string: "ping",
 			context: "Description for the ping command\n" +
 				"**Translate the names of arguments (ex. \"suggestion id\"), don't translate actual arguments that are input into the bot (ex. \"on\", \"off\", \"toggle\")**"
-		},
-		"COMMAND_DESC:PROTIPS": {
-			string: "Views/edits your protip setting",
-			context: "Description for the protips command"
-		},
-		"COMMAND_USAGE:PROTIPS": {
-			string: "protips (on|off|toggle)",
-			context: "Description for the protips command\n" +
-				"**Translate the names of arguments (ex. \"suggestion id\"), don't translate actual arguments that are input into the bot (ex. \"on\", \"off\", \"toggle\")**"
-		},
-		"COMMAND_EXAMPLES:PROTIPS": {
-			string: "`{{p}}protips`\n" +
-				"Shows your protips setting\n" +
-				"\n" +
-				"`{{p}}protips on`\n" +
-				"Enables showing protips\n" +
-				"\n" +
-				"`{{p}}protips off`\n" +
-				"Disables showing protips\n" +
-				"\n" +
-				"`{{p}}protips toggle`\n" +
-				"Toggles showing protips",
-			context: "Examples for the protips command\n" +
-				"**Leave** `{{p}}` **as-is, it is replaced in the help command.**"
 		},
 		"COMMAND_DESC:SHARD": {
 			string: "Shows the shard this server is on",
@@ -4862,12 +4580,12 @@ module.exports = {
 				"Make sure to keep original formatting and not translate actual inputs like `onevote`"
 		},
 		"CONFIG_NAME:INCHANNELSUGGESTIONS": {
-			string: "In-Suggestions Channel Suggestion Submission",
-			context: "Name of the In-Suggestions Channel Suggestion Submission config element"
+			string: "Commandless Suggestions",
+			context: "Name of the Commandless Suggestions config element"
 		},
 		"CONFIG_DESC:INCHANNELSUGGESTIONS": {
 			string: "This setting controls whether or not users can submit suggestions via sending a message in the suggestions feed channel.",
-			context: "Description of the In-Suggestions Channel Suggestion Submission config element"
+			context: "Description of the Commandless Suggestions config element"
 		},
 		"CONFIG_EXAMPLES:INCHANNELSUGGESTIONS": {
 			string: "`{{p}}config inchannelsuggestions on`\n" +
@@ -4875,7 +4593,7 @@ module.exports = {
 				"\n" +
 				"`{{p}}config inchannelsuggestions off`\n" +
 				"Prevents users from submitting suggestions via any message in the suggestions feed channel",
-			context: "Examples for the In-Suggestions Channel Suggestion Submission config element\n" +
+			context: "Examples for the Commandless Suggestions config element\n" +
 				"Make sure to keep original formatting and not translate actual inputs like `inchannelsuggestions`"
 		},
 		"CONFIG_NAME:COLORCHANGE": {
@@ -5124,12 +4842,12 @@ module.exports = {
 			}
 		},
 		"PRIVACY_INFO": {
-			string: "You can find Suggester's privacy policy and security information at {{link}}",
-			context: "Shows the link to Suggester's privacy policy and security information",
+			string: "You can find a link to Suggester's privacy policy [here]({{link}})",
+			context: "Shows the link to Suggester's privacy policy.",
 			replaced: {
 				link: {
 					to_replace: "{{link}}",
-					description: "The link to the information"
+					description: "The link to the policy"
 				}
 			}
 		},

@@ -53,7 +53,7 @@ module.exports = {
 		let replyEmbed = new Discord.MessageEmbed()
 			.setTitle(string(locale, "COMMENT_ADDED_TITLE"))
 			.setDescription(`${qSuggestionDB.suggestion || string(locale, "NO_SUGGESTION_CONTENT")}\n[${string(locale, "SUGGESTION_FEED_LINK")}](https://discord.com/channels/${qSuggestionDB.id}/${qSuggestionDB.channels.suggestions || qServerDB.config.channels.suggestions}/${qSuggestionDB.messageId})`)
-			.addField(string(locale, "COMMENT_TITLE", { user: message.author.tag, id: `${id}_${commentId}` }), comment)
+			.addField(string(locale, "COMMENT_TITLE", { user: message.author.username, id: `${id}_${commentId}` }), comment)
 			.setColor(client.colors.blue)
 			.setFooter(string(locale, "SUGGESTION_FOOTER", { id: id.toString() }))
 			.setTimestamp(qSuggestionDB.submitted);
@@ -66,7 +66,7 @@ module.exports = {
 		}
 
 		await notifyFollowers(client, qServerDB, qSuggestionDB, "blue", { string: "COMMENT_ADDED_DM_TITLE", guild: message.guild.name }, null, qServerDB.config.channels.suggestions, null, function (e, l) {
-			e.addField(string(l, "COMMENT_TITLE", { user: message.author.tag, id: `${id}_${commentId}` }), comment);
+			e.addField(string(l, "COMMENT_TITLE", { user: message.author.username, id: `${id}_${commentId}` }), comment);
 			return e;
 		});
 		return { protip: { command: "comment" } };

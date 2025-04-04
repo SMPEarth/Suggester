@@ -24,15 +24,15 @@ module.exports = {
 
 		await message.guild.members.fetch(user.id).catch(() => {});
 
-		const DEV_BADGE = "<:new_dev1:880747651115655189>";
-		const DONATOR_BADGE = "<:new_donator:880747316980645939>";
-		const GLOBAL_STAFF_BADGE = "<:new_globalstaff:880747347083157525>";
-		const NO_COOLDOWN_BADGE = "<:new_nocooldown:880747397624528896>";
-		const SERVER_ADMIN_BADGE = "<:new_serveradmin:880747442528714752>";
-		const SERVER_STAFF_BADGE = "<:new_serverstaff:880747424694534205>";
-		const TRANSLATOR_BADGE = "<:new_translator:880914243472457788>";
-		const BLOCKED_BADGE = "<:red_lock:880896793175523328>";
-		const PROTECTED_BADGE = "<:yellow_lock:880896842974511134>";
+		const DEV_BADGE = "🛡️";
+		const DONATOR_BADGE = "❤️";
+		const GLOBAL_STAFF_BADGE = "📣";
+		const NO_COOLDOWN_BADGE = "⏲️";
+		const SERVER_ADMIN_BADGE = "👑";
+		const SERVER_STAFF_BADGE = "🔨";
+		const TRANSLATOR_BADGE = "🌍";
+		const BLOCKED_BADGE = "🚫";
+		const PROTECTED_BADGE = "☝️";
 
 		let globalPosArr = [];
 		let posArr = [];
@@ -56,7 +56,7 @@ module.exports = {
 		let permissionLevel = await checkPermissions(message.guild.members.cache.get(user.id), client);
 		let senderPermissionLevel = await checkPermissions(message.member, client);
 		let embed = new Discord.MessageEmbed()
-			.setAuthor(user.tag, user.displayAvatarURL({format: "png", dynamic: true}))
+			.setAuthor(user.username, user.displayAvatarURL({format: "png", dynamic: true}))
 			.setColor(qUserDB.verifyColor || client.colors.default)
 			.setFooter(string(locale, "VERIFY_PERMISSION_LEVEL_FOOTER", { level: permissionLevel.toString() }));
 		if (globalPosArr.length > 0) embed.addField(string(locale, "VERIFY_TITLE_GLOBAL_ACKS"), `${globalPosArr.join("\n")}`);

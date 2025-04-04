@@ -197,11 +197,11 @@ module.exports = {
 				if (returnCollect.content) {
 					let prefix = returnCollect.content.toLowerCase().split(" ")[0];
 
-					if (prefix.length > 20) {
+					if (prefix.length > 5) {
 						message.channel.send(string(locale, "CFG_PREFIX_TOO_LONG_ERROR", {}, "error"));
 						return setup(7);
 					}
-					let disallowed = ["suggester:", `${client.user.id}:`];
+					let disallowed = ["suggester:", `${client.user.id}:`, "suggest"];
 					if (disallowed.includes(prefix)) {
 						message.channel.send(string(locale, "CFG_PREFIX_DISALLOWED_ERROR", {}, "error"));
 						return setup(7);
@@ -213,7 +213,7 @@ module.exports = {
 						await dbModify("Server", {id: message.guild.id}, db);
 						return message.channel.send(string(locale, "CFG_PREFIX_SET_SUCCESS", { prefix: Discord.escapeMarkdown(p) }, "success"));
 					}
-					if (prefix.includes("suggest")) {
+					if (prefix.includes("suggestion")) {
 						if ((await confirmation(
 							message,
 							string(locale, "SETUP_PREFIX_INCLUDES_SUGGEST", { prefix: prefix, check: `<:${emoji.check}>`, x: `<:${emoji.x}>`}),
