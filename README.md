@@ -1,7 +1,7 @@
 <div align="center">
   <h3 align="center">Suggester</h3>
   <p align="center">
-   A suggestion-focused Discord bot in more than 58,000 servers
+   A suggestion-focused Discord bot in more than 60,000 servers
     <br />
     <a href="https://suggester.js.org/"><strong>Explore the docs »</strong></a>
     <br />
@@ -31,4 +31,5 @@ Suggester is a suggestion-focused Discord bot whose main purpose is to allow ser
 ## Selfhosting & Contributions
 Suggester's code is open source to allow the community to contribute to its development. When submitting a pull request, We expect a clear description of what problem it solves or what feature it adds. Make sure to use appropriate formatting when you make contributions. If you have any questions, feel free to ask in the [support server](https://suggester.js.org/support).
 
-⚠ **We do not allow people to host public clones of Suggester or provide support for it. While you can selfhost for strictly private use, we cannot provide technical support for self-hosted versions.**
+> [!WARNING]
+> You are not allowed to host a public clone of Suggester or provide support for it. While you can selfhost it for private use, we cannot provide technical support for self-hosted versions.
