@@ -1,3 +1,6 @@
+<h1>⚠️ As of July 19, 2025, Suggester is no longer operational.</h1>
+<p>See the <a href="https://discord.gg/G5pEdUp">support server for more info</a>. Thanks for your support over the years ❤️</p>
+<hr>
 <div align="center">
   <h3 align="center">Suggester</h3>
   <p align="center">
