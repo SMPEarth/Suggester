@@ -1,7 +1,7 @@
 {
   "name": "suggester",
   "description": "A bot that manages suggestions on Discord",
-  "repository": "https://github.com/Suggester/Suggester",
+  "repository": "https://github.com/SMPEarth/Suggester",
   "license": "MIT",
   "main": "index.js",
   "scripts": {
@@ -33,6 +33,7 @@
     "valid-url": "1.0.9"
   },
   "devDependencies": {
+    "@types/node": "^24.2.0",
     "eslint": "^7.16.0",
     "nodemon": "^2.0.6"
   },

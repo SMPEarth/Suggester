@@ -15,7 +15,7 @@ module.exports = {
 		docs: "sumup"
 	},
 	do: async (locale, message, client, args, Discord) => {
-		get("https://api.github.com/repos/Suggester/Suggester/releases/latest").then(({ data }) => {
+		get("https://api.github.com/repos/SMPEarth/Suggester/releases/latest").then(({ data }) => {
 			let split_body = Discord.Util.splitMessage(data.body, {
 				char: " "
 			});

@@ -115,3 +115,4 @@ commands/test.js
 utils/testSchemas.js
 watch.json
 /test.md
+data-db/

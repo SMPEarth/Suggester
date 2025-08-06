@@ -6,6 +6,8 @@ const { notifyFollowers } = require("../../utils/actions");
 const { baseConfig, checkSuggestions, checkReview } = require("../../utils/checks");
 const { cleanCommand } = require("../../utils/actions");
 const { actCard, trelloComment } = require("../../utils/trello");
+const {createThread} = require("../../utils/threads");
+
 module.exports = {
 	controls: {
 		name: "approve",
@@ -21,7 +23,7 @@ module.exports = {
 		cooldownMessage: "Need to approve multiple suggestions? Try the `mapprove` command!",
 		docs: "staff/approve"
 	},
-	do: async (locale, message, client, args, Discord, noCommand=false) => {
+	do: async (locale, message, client, args, Discord, noCommand = false) => {
 		let [returned, qServerDB] = await baseConfig(locale, message.guild);
 		if (returned) return message.channel.send(returned);
 		let guildLocale = qServerDB.config.locale;
@@ -71,7 +73,7 @@ module.exports = {
 			let returned = await client.channels.cache.get(qSuggestionDB.channels.staff || qServerDB.config.channels.staff).messages.fetch(qSuggestionDB.reviewMessage).then(fetched => {
 				fetched.edit((reviewEmbed(guildLocale, qSuggestionDB, suggester, "green", string(guildLocale, "APPROVED_BY", { user: message.author.username }))));
 				fetched.reactions.removeAll();
-			}).catch(() => {});
+			}).catch(() => { });
 			if (returned) return;
 		}
 
@@ -80,8 +82,8 @@ module.exports = {
 		if (!noCommand) {
 			let replyEmbed = new Discord.MessageEmbed()
 				.setTitle(string(locale, "SUGGESTION_APPROVED_TITLE"))
-				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({format: "png", dynamic: true}))
-				.setFooter(string(locale, "APPROVED_BY", { user: message.author.username }), message.author.displayAvatarURL({format: "png", dynamic: true}))
+				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: suggester.username }), suggester.displayAvatarURL({ format: "png", dynamic: true }))
+				.setFooter(string(locale, "APPROVED_BY", { user: message.author.username }), message.author.displayAvatarURL({ format: "png", dynamic: true }))
 				.setDescription(qSuggestionDB.suggestion || string(locale, "NO_SUGGESTION_CONTENT"))
 				.setColor(client.colors.green);
 			isComment ? replyEmbed.addField(string(locale, "COMMENT_TITLE", { user: message.author.username, id: `${id.toString()}_1` }), comment) : "";
@@ -122,8 +124,13 @@ module.exports = {
 				};
 			}
 			await dbModify("Suggestion", { suggestionId: id, id: message.guild.id }, qSuggestionDB);
+
+			createThread(posted.channel.id, posted.id, `#${id} - ${qSuggestionDB.suggestion}`, client).catch((reason) => {
+				console.error("Failed to create thread for suggestion approval.", reason);
+			});
+
 			client.reactInProgress = false;
-			await notifyFollowers(client, qServerDB, qSuggestionDB, "green", { string: "APPROVED_DM_TITLE", guild: message.guild.name }, qSuggestionDB.attachment, qServerDB.config.channels.suggestions, null, function(e, l) {
+			await notifyFollowers(client, qServerDB, qSuggestionDB, "green", { string: "APPROVED_DM_TITLE", guild: message.guild.name }, qSuggestionDB.attachment, qServerDB.config.channels.suggestions, null, function (e, l) {
 				if (comment) e.addField(string(l, "COMMENT_TITLE", { user: message.author.username, id: `${id.toString()}_1` }), comment);
 				return e;
 			});

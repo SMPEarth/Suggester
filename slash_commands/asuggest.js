@@ -10,13 +10,14 @@ const humanizeDuration = require("humanize-duration");
 const { initTrello } = require("../utils/trello");
 module.exports = async function (interaction, client) {
 	function respond(data) {
-		client.api.interactions(interaction.id, interaction.token).callback.post({data: {
-			type: 4,
+		client.api.interactions(interaction.id, interaction.token).callback.post({
 			data: {
-				content: data,
-				flags: 64
+				type: 4,
+				data: {
+					content: data,
+					flags: 64
+				}
 			}
-		}
 		});
 	}
 	let qUserDB = await dbQuery("User", { id: interaction.member.user.id });
@@ -24,6 +25,10 @@ module.exports = async function (interaction, client) {
 	if (!interaction.guild_id) return respond(string(locale, "COMMAND_SERVER_ONLY", {}, "error"));
 	let qServerDB = await dbQuery("Server", { id: interaction.guild_id });
 	locale = qUserDB.locale || (qServerDB ? qServerDB.config.locale : "") || "en";
+
+	if (qServerDB.flags.includes("NO_SUGGESTIONS")) {
+		return respond("We aren't accepting suggestions yet!");
+	}
 
 	if (!qServerDB) return respond(string(locale, "UNCONFIGURED_ERROR", {}, "error"));
 	const guildLocale = qServerDB.config.locale;
@@ -34,7 +39,7 @@ module.exports = async function (interaction, client) {
 	if (missingConfig) return respond(`${missingConfig.description}\n\n**${missingConfig.fields[0].name}**\n${missingConfig.fields[0].value}`);
 
 	let guild = client.guilds.cache.get(interaction.guild_id);
-	await guild.members.fetch(interaction.member.user.id).catch(() => {});
+	await guild.members.fetch(interaction.member.user.id).catch(() => { });
 	let user = await fetchUser(interaction.member.user.id, client);
 	let member = guild.members.cache.get(interaction.member.user.id);
 	if (!member) return respond(string(locale, "ERROR", {}, "error"));
@@ -54,7 +59,7 @@ module.exports = async function (interaction, client) {
 					};
 				}
 			});
-			return respond(string(locale, "NO_ALLOWED_ROLE_ERROR", { roleList: roles.map(r => r.name).join(", ") }, "error"), {disableMentions: "everyone"});
+			return respond(string(locale, "NO_ALLOWED_ROLE_ERROR", { roleList: roles.map(r => r.name).join(", ") }, "error"), { disableMentions: "everyone" });
 		}
 	}
 
@@ -65,12 +70,12 @@ module.exports = async function (interaction, client) {
 	}
 
 	if (qServerDB.config.suggestion_cooldown && !qServerDB.config.cooldown_exempt.includes(interaction.member.user.id) && permission > 3) {
-		let foundCooldown = (await dbQueryAll("Suggestion", { id: guild.id, suggester: interaction.member.user.id, submitted: { "$gte": new Date(Date.now()-qServerDB.config.suggestion_cooldown) } })).sort((a, b) => b.submitted - a.submitted)[0];
-		if (foundCooldown) return respond(string(locale, "CUSTOM_COOLDOWN_FLAG", { time: humanizeDuration(qServerDB.config.suggestion_cooldown+(new Date(foundCooldown.submitted).getTime())-Date.now(), { language: locale, fallbacks: ["en"] }) }, "error"));
+		let foundCooldown = (await dbQueryAll("Suggestion", { id: guild.id, suggester: interaction.member.user.id, submitted: { "$gte": new Date(Date.now() - qServerDB.config.suggestion_cooldown) } })).sort((a, b) => b.submitted - a.submitted)[0];
+		if (foundCooldown) return respond(string(locale, "CUSTOM_COOLDOWN_FLAG", { time: humanizeDuration(qServerDB.config.suggestion_cooldown + (new Date(foundCooldown.submitted).getTime()) - Date.now(), { language: locale, fallbacks: ["en"] }) }, "error"));
 	}
 
 	if (qServerDB.config.suggestion_cap && permission > 3) {
-		if ((await dbQueryAll("Suggestion", { id: guild.id, status: "approved", implemented: false } )).length >= qServerDB.config.suggestion_cap) return respond(string(locale, "CAP_REACHED_ERROR", { cap: qServerDB.config.suggestion_cap }, "error"));
+		if ((await dbQueryAll("Suggestion", { id: guild.id, status: "approved", implemented: false })).length >= qServerDB.config.suggestion_cap) return respond(string(locale, "CAP_REACHED_ERROR", { cap: qServerDB.config.suggestion_cap }, "error"));
 	}
 
 	let suggestion = interaction.data.options && interaction.data.options.find(o => o.name === "suggestion") ? interaction.data.options.find(o => o.name === "suggestion").value : "";
@@ -156,7 +161,7 @@ module.exports = async function (interaction, client) {
 		}
 	} else if (qServerDB.config.mode === "autoapprove") {
 		if (client.channels.cache.get(qServerDB.config.channels.suggestions)) {
-			let perms = channelPermissions(locale,  "suggestions", client.channels.cache.get(qServerDB.config.channels.suggestions), client, true);
+			let perms = channelPermissions(locale, "suggestions", client.channels.cache.get(qServerDB.config.channels.suggestions), client, true);
 			if (perms) return respond(perms);
 		} else return respond(string(locale, "NO_SUGGESTION_CHANNEL_ERROR", {}, "error"));
 

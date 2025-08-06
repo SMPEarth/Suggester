@@ -13,11 +13,10 @@ module.exports = {
 	},
 	do: async (locale, message, client, args) => {
 		let toReboot = args[0] || "all";
-		
-			await coreLog(`🔌 ${message.author.username} (\`${message.author.id}\`) initiated a reboot`, client);
-			await message.channel.send(`Rebooting ${toReboot !== "all" ? `shard ${toReboot}` : "all shards"}...`);
-			if (toReboot === "all") return client.shard.respawnAll();
-			client.shard.broadcastEval(`if (this.shard.ids[0] === ${toReboot}) process.exit()`);
-		
+
+		await coreLog(`🔌 ${message.author.username} (\`${message.author.id}\`) initiated a reboot`, client);
+		await message.channel.send(`Rebooting ${toReboot !== "all" ? `shard ${toReboot}` : "all shards"}...`);
+		if (toReboot === "all") return client.shard.respawnAll();
+		client.shard.broadcastEval(`if (this.shard.ids[0] === ${toReboot}) process.exit()`);
 	}
 };

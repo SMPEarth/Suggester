@@ -8,6 +8,6 @@ services:
     ports:
       - '9229:9229'
 
-  database:
-    logging:
-      driver: 'none'
+  # database:
+  #   logging:
+  #     driver: 'none'

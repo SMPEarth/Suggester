@@ -25,9 +25,14 @@ module.exports = {
 		cooldown: 5,
 		docs: "sumup"
 	},
-	do: async (locale, message, client, args, Discord, noCommand=false) => {
+	do: async (locale, message, client, args, Discord, noCommand = false) => {
 		let qServerDB = await dbQuery("Server", { id: message.guild.id });
 		if (!qServerDB) return message.channel.send(string(locale, "UNCONFIGURED_ERROR", {}, "error"));
+
+		if (qServerDB.flags.includes("NO_SUGGESTIONS")) {
+			return message.react("❌");
+		}
+
 		const guildLocale = qServerDB.config.locale;
 
 		let missingConfig = await checkConfig(locale, qServerDB, client);
@@ -46,7 +51,7 @@ module.exports = {
 						};
 					}
 				});
-				return message.channel.send(string(locale, "NO_ALLOWED_ROLE_ERROR", { roleList: roles.map(r => r.name).join(", ") }, "error"), {disableMentions: "everyone"}).then(sent => {
+				return message.channel.send(string(locale, "NO_ALLOWED_ROLE_ERROR", { roleList: roles.map(r => r.name).join(", ") }, "error"), { disableMentions: "everyone" }).then(sent => {
 					cleanCommand(message, sent, qServerDB, noCommand);
 				});
 			}
@@ -59,12 +64,12 @@ module.exports = {
 		}
 
 		if (qServerDB.config.suggestion_cooldown && !qServerDB.config.cooldown_exempt.includes(message.author.id) && permission > 3) {
-			let foundCooldown = (await dbQueryAll("Suggestion", { id: message.guild.id, suggester: message.author.id, submitted: { "$gte": new Date(Date.now()-qServerDB.config.suggestion_cooldown) } })).sort((a, b) => b.submitted - a.submitted)[0];
-			if (foundCooldown) return message.channel.send(string(locale, "CUSTOM_COOLDOWN_FLAG", { time: humanizeDuration(qServerDB.config.suggestion_cooldown+(new Date(foundCooldown.submitted).getTime())-Date.now(), { language: locale, fallbacks: ["en"] }) }, "error")).then(sent => cleanCommand(message, sent, qServerDB, noCommand));
+			let foundCooldown = (await dbQueryAll("Suggestion", { id: message.guild.id, suggester: message.author.id, submitted: { "$gte": new Date(Date.now() - qServerDB.config.suggestion_cooldown) } })).sort((a, b) => b.submitted - a.submitted)[0];
+			if (foundCooldown) return message.channel.send(string(locale, "CUSTOM_COOLDOWN_FLAG", { time: humanizeDuration(qServerDB.config.suggestion_cooldown + (new Date(foundCooldown.submitted).getTime()) - Date.now(), { language: locale, fallbacks: ["en"] }) }, "error")).then(sent => cleanCommand(message, sent, qServerDB, noCommand));
 		}
 
 		if (qServerDB.config.suggestion_cap && permission > 3) {
-			if ((await dbQueryAll("Suggestion", { id: message.guild.id, status: "approved", implemented: false } )).length >= qServerDB.config.suggestion_cap) return message.channel.send(string(locale, "CAP_REACHED_ERROR", { cap: qServerDB.config.suggestion_cap }, "error"));
+			if ((await dbQueryAll("Suggestion", { id: message.guild.id, status: "approved", implemented: false })).length >= qServerDB.config.suggestion_cap) return message.channel.send(string(locale, "CAP_REACHED_ERROR", { cap: qServerDB.config.suggestion_cap }, "error"));
 		}
 
 		let attachment = message.attachments.first() ? message.attachments.first().url : "";
@@ -107,7 +112,7 @@ module.exports = {
 			if (!qSuggestionDB) return message.channel.send(string(locale, "ERROR", {}, "error"));
 
 			let replyEmbed = new Discord.MessageEmbed()
-				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: message.author.username }), message.author.displayAvatarURL({dynamic: true, format: "png"}))
+				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: message.author.username }), message.author.displayAvatarURL({ dynamic: true, format: "png" }))
 				.setDescription(suggestion)
 				.setFooter(string(locale, "SUGGESTION_FOOTER", { id: id.toString() }))
 				.setTimestamp()
@@ -156,7 +161,7 @@ module.exports = {
 			}
 		} else if (qServerDB.config.mode === "autoapprove") {
 			if (client.channels.cache.get(qServerDB.config.channels.suggestions)) {
-				let perms = channelPermissions(locale,  "suggestions", client.channels.cache.get(qServerDB.config.channels.suggestions), client);
+				let perms = channelPermissions(locale, "suggestions", client.channels.cache.get(qServerDB.config.channels.suggestions), client);
 				if (perms) return message.channel.send(perms);
 			} else return message.channel.send(string(locale, "NO_SUGGESTION_CHANNEL_ERROR", {}, "error"));
 
@@ -224,7 +229,7 @@ module.exports = {
 				});
 
 			let replyEmbed = new Discord.MessageEmbed()
-				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: message.author.username }), message.author.displayAvatarURL({format: "png", dynamic: true}))
+				.setAuthor(string(locale, "SUGGESTION_FROM_TITLE", { user: message.author.username }), message.author.displayAvatarURL({ format: "png", dynamic: true }))
 				.setDescription(suggestion || string(locale, "NO_SUGGESTION_CONTENT"))
 				.setFooter(string(locale, "SUGGESTION_FOOTER", { id: id.toString() }))
 				.setTimestamp()
