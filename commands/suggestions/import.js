@@ -2,7 +2,7 @@ const { string } = require("../../utils/strings");
 const { suggestionEmbed, fetchUser } = require("../../utils/misc");
 const { checkSuggestions, checkDenied, baseConfig, channelPermissions, checkPermissions } = require("../../utils/checks");
 const { deleteFeedMessage, confirmation } = require("../../utils/actions");
-const { dbQueryAll } = require("../../utils/db");
+const { dbQueryAll, dbQuery} = require("../../utils/db");
 const { Suggestion } = require("../../utils/schemas");
 const humanizeDuration = require("humanize-duration");
 const { support_invite, emoji } = require("../../config.json");
@@ -64,7 +64,8 @@ module.exports = {
 			"668116464351576085",
 			"699677631372853248",
 			"245675252821000193",
-			"356878329602768897"
+			"356878329602768897",
+			"564426594144354315"
 		];
 		let botArr = [];
 		for await (let b of bots) {
@@ -92,13 +93,14 @@ module.exports = {
 		)) return;
 
 		await message.guild.members.fetch();
-
 		let startTime = Date.now();
+
 		message.channel.messages.fetch({ limit: num, before: message.id }).then(async messages => {
 			const importedIds = (await dbQueryAll("Suggestion", { id: message.guild.id, imported: { $ne: null } })).map(s => s.imported);
 			let sent = await message.channel.send(string(locale, "IMPORT_START", { time: humanizeDuration(4000*messages.size, { language: locale, fallbacks: ["en"] }) }));
 			let successCount = 0;
 			let errorCount = 0;
+
 			for await (let m of messages.array().reverse()) {
 				if (importedIds.includes(m.id) || message.content.length > 1024 || m.system) {
 					errorCount++;
@@ -125,6 +127,30 @@ module.exports = {
 				};
 				let embed = m.embeds.length > 0 ? m.embeds[0] : null;
 				switch (m.author.id) {
+				case "564426594144354315": //Suggestion Bot
+					if (!qServerDB.flags.includes("NEW_SUGGESTION_IMPORT")) {
+						errorCount++;
+						continue;
+					}
+					if (!embed || !embed.author) {
+						errorCount++;
+						continue;
+					}
+
+					// eslint-disable-next-line no-case-declarations
+					let authorName = embed.author.name.replace(/^Suggestion from /, "").replace(/#\d+$/, "");
+					// eslint-disable-next-line no-case-declarations
+					let member = message.guild.members.cache.find(m => m.user.username === authorName);
+
+					suggestionInfo.suggester = member ? member.id : null;
+					suggestionInfo.suggestion = embed.description;
+					/*
+					TODO: add support for the following fields:
+					state of suggestion if implemented/sugested/denied
+					Votes (up/down) - from reactions or embed
+					comments or denial reasons
+					*/
+					break;
 				case "393848142585397248": //Havoc
 					if (!embed || !embed.author || !embed.author.name) {
 						errorCount++;
@@ -399,6 +425,7 @@ module.exports = {
 					}
 					break;
 				case "567033485882163200": //Suggestion#2670
+					// not really ready yet, but will be used for the future
 					if (!embed) {
 						errorCount++;
 						continue;
