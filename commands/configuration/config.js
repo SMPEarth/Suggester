@@ -9,7 +9,7 @@ const humanizeDuration = require("humanize-duration");
 const { string, list } = require("../../utils/strings");
 const colorstring = require("color-string");
 const { initTrello, findList, findLabel } = require("../../utils/trello");
-const { slash_url } = require("../other/invite");
+
 module.exports = {
 	controls: {
 		name: "config",
@@ -1183,14 +1183,14 @@ module.exports = {
 			description: "This setting controls whether or not users can submit anonymous suggestions.",
 			examples: "`{{p}}config anonymous on`\nEnables the ability to submit anonymous suggestions\n\n`{{p}}config anonymous off`\nDisables the ability to submit anonymous suggestion",
 			cfg: async function() {
-				if (!args[1]) return message.channel.send(string(locale, qServerDB.config.anon ? "CFG_ANONYMOUS_ENABLED" : "CFG_ANONYMOUS_DISABLED", { invite: `${slash_url.replace("[ID]", client.user.id).slice(0, -1)}&guild_id=${message.guild.id}>` }));
+				if (!args[1]) return message.channel.send(string(locale, qServerDB.config.anon ? "CFG_ANONYMOUS_ENABLED" : "CFG_ANONYMOUS_DISABLED", { invite: "Private bot invite" }));
 				switch (args[1].toLowerCase()) {
 				case "enable":
 				case "on": {
 					if (!qServerDB.config.anon) {
 						qServerDB.config.anon = true;
 						await dbModify("Server", {id: server.id}, qServerDB);
-						return message.channel.send(string(locale, "CFG_ANONYMOUS_ENABLED", { invite: `${slash_url.replace("[ID]", client.user.id).slice(0, -1)}&guild_id=${message.guild.id}>` }, "success"));
+						return message.channel.send(string(locale, "CFG_ANONYMOUS_ENABLED", { invite: "Private bot invite" }, "success"));
 					} else return message.channel.send(string(locale, "CFG_ANONYMOUS_ALREADY_ENABLED", {}, "error"));
 				}
 				case "disable":
@@ -1204,7 +1204,7 @@ module.exports = {
 				case "toggle":
 					qServerDB.config.anon = !qServerDB.config.anon;
 					await dbModify("Server", {id: server.id}, qServerDB);
-					return message.channel.send(string(locale, qServerDB.config.anon ? "CFG_ANONYMOUS_ENABLED" : "CFG_ANONYMOUS_DISABLED", { invite: `${slash_url.replace("[ID]", client.user.id).slice(0, -1)}&guild_id=${message.guild.id}>` }, "success"));
+					return message.channel.send(string(locale, qServerDB.config.anon ? "CFG_ANONYMOUS_ENABLED" : "CFG_ANONYMOUS_DISABLED", { invite: "Private bot invite" }, "success"));
 				default:
 					return message.channel.send(string(locale, "ON_OFF_TOGGLE_ERROR", {}, "error"));
 				}
