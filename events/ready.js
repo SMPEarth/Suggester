@@ -1,7 +1,7 @@
 const { coreLog } = require("../utils/logs");
 const { Suggestion } = require("../utils/schemas");
-const { release, lists, memoryReboot } = require("../config.json");
-const blapi = require("blapi");
+const { release, memoryReboot } = require("../config.json");
+// const blapi = require("blapi");
 const chalk = require("chalk");
 
 module.exports = async (Discord, client) => {
@@ -26,15 +26,14 @@ module.exports = async (Discord, client) => {
 	coreLog(`🆗 Logged in with ${client.guilds.cache.size} servers! (Shard: ${client.shard.ids[0]})`, client);
 	console.log(chalk`{green [{bold INFO}] Logged in as {bold ${client.user.username}}! (Release: {bold ${release}, Shard: ${client.shard.ids[0]})}}`);
 
-	async function getGuildCount() {
-		const guildCounts = await client.shard.fetchClientValues("guilds.cache.size"); // ['1006', '966']
-		const totalGuildCount = guildCounts.reduce((total, current) => total + current, 0); // 1972
-		return [guildCounts, totalGuildCount];
-	}
+	// async function getGuildCount() {
+	// 	const guildCounts = await client.shard.fetchClientValues("guilds.cache.size"); // ['1006', '966']
+	// 	const totalGuildCount = guildCounts.reduce((total, current) => total + current, 0); // 1972
+	// 	return [guildCounts, totalGuildCount];
+	// }
 
 	let presences = [
 		["WATCHING", async () => `${(await Suggestion.countDocuments())} suggestions`],
-		["PLAYING", `Join our support server! Use "@${client.user.username}" support for more info`]
 	];
 
 	let p = 0;
@@ -44,7 +43,7 @@ module.exports = async (Discord, client) => {
 		let text = presence[1];
 		if (typeof text == "function")
 			text = await text();
-		client.user.setActivity(`${text} • @${client.user.username} help`, { type });
+		client.user.setActivity(text, { type });
 		p = p+1 === presences.length ? 0 : p+1;
 	}
 	await setPresence();
@@ -65,17 +64,17 @@ module.exports = async (Discord, client) => {
 		}
 	}, 60000); // Memory management every 30 minutes
 
-	//Post to bot lists
-	async function post() {
-		let [guildCounts, totalGuildCount] = await getGuildCount();
-
-		blapi.manualPost(totalGuildCount, client.user.id, lists, null, guildCounts.length, guildCounts);
-	}
-
-	if (client.user.id === "564426594144354315" && client.shard.ids[0] === client.shard.count-1 && process.env.NODE_ENV === "production" && lists) {
-		await post();
-		client.setInterval(async function() {
-			await post();
-		}, 1800000);
-	}
+	// //Post to bot lists
+	// async function post() {
+	// 	let [guildCounts, totalGuildCount] = await getGuildCount();
+	//
+	// 	blapi.manualPost(totalGuildCount, client.user.id, lists, null, guildCounts.length, guildCounts);
+	// }
+	//
+	// if (client.user.id === "564426594144354315" && client.shard.ids[0] === client.shard.count-1 && process.env.NODE_ENV === "production" && lists) {
+	// 	await post();
+	// 	client.setInterval(async function() {
+	// 		await post();
+	// 	}, 1800000);
+	// }
 };

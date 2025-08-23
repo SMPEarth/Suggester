@@ -6,6 +6,7 @@ services:
     depends_on:
       - 'database'
     volumes:
+      - '.:/usr/src/app'
       - './config.json:/usr/src/app/config.json'
       - './.env:/usr/src/app/.env'
 
